@@ -1,0 +1,12 @@
+# نموذج ملف key.properties — انسخه لـ key.properties وعبّي قيمك الحقيقية.
+#
+# ⚠️ key.properties نفسه مستبعد من Git عبر .gitignore — مفيش مفاتيح بتترفع.
+# لإعادة إنشاء الـ keystore:
+#   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA \
+#           -keysize 2048 -validity 10000 -alias upload
+# وحط الملف في android/app/ (أو استخدم مسار مطلق في storeFile).
+
+storePassword=ضع_كلمة_السر_للـ_keystore_هنا
+keyPassword=ضع_كلمة_السر_للمفتاح_هنا
+keyAlias=upload
+storeFile=upload-keystore.jks

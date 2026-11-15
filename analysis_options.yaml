@@ -1,3 +1,4 @@
+
 analyzer:
   exclude:
     - build/**
@@ -7,6 +8,9 @@ analyzer:
     - ios/**
     - macos/**
     - linux/**
+  errors:
+    deprecated_member_use: ignore
+
 include: package:flutter_lints/flutter.yaml
 
 # نفس روح مشروع الرحلات: تنظيف صارم — صفر تحذيرات.

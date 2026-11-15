@@ -1,122 +1,82 @@
-# ببساطة 📝
+# Besbasa | ببساطة
 
-<!-- بعد أول push بدّل USERNAME باسم حسابك على GitHub عشان الشارة تشتغل -->
-[![CI](https://github.com/USERNAME/besbasa/actions/workflows/ci.yml/badge.svg)](https://github.com/USERNAME/besbasa/actions/workflows/ci.yml)
+**Summarize any text in one tap — paste it, open a TXT or PDF file, or snap a photo of the page. You get a few key points and a simple explanation. Fully offline.**
 
-تطبيق أوفلاين 100% يلخص أي منهج أو نص طويل **ببساطة شديدة**:
-**نقاط قليلة + شرح مبسط** — من غير إنترنت ومن غير أي سيرفر.
+![Flutter](https://img.shields.io/badge/Flutter-3.35%2B-02569B?logo=flutter&logoColor=white)
+![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20Web%20%7C%20Windows-4CAF50)
+![Offline](https://img.shields.io/badge/Offline--first-100%25-FF7043)
+[![CI](https://github.com/Mark5486/summary_app/actions/workflows/ci.yml/badge.svg)](https://github.com/Mark5486/summary_app/actions/workflows/ci.yml)
 
-## الفكرة
+Besbasa is an offline-first text summarizer: it picks the most important sentences from your text and explains them simply — with no internet, no server, and no data ever leaving your device. Arabic and English supported.
 
-- تلصق النص (أو تفتح ملف `.txt` — أو تصوّر صفحة بالكاميرا على الموبايل والويب).
-- المحرك الاستخلاصي المدمج (خوارزمية تكرار الكلمات + مواقع الجمل) بيطلع:
-  - **نقاط قليلة**: أهم 3–5 جمل في النص.
-  - **شرح مبسط**: الفكرة الأساسية + أهم الكلمات.
-- كل حاجة بتحصل **داخل الموبايل نفسه** — مفيش أي إنترنت مطلوب للتلخيص.
-- **النتيجة على الهوم**: بعد التلخيص النتيجة بتظهر بعنوان واضح وشارة "محفوظ في السجل ✓"، والتطبيق بينزل ليها تلقائيًا.
-- **آخر ملخص بيفضل معاك**: آخر ملخص عملته بيفضل ظاهر على الهوم حتى بعد قفل التطبيق — بعنوان "آخر ملخص من السجل" وزرار مسح من الهوم (السجل نفسه مبيتلمس).
-- السجل محفوظ محليًا مع بحث فوري.
+## The Idea
 
-## زرار التلخيص والسكرول والملفات الكبيرة
+Paste any long text (a lesson, an article, a report), open a `.txt` or `.pdf` file, or capture a page with the camera — Besbasa returns **a few key points** (the top 3–5 sentences) plus a **simple explanation** with the most frequent keywords. Everything happens inside the app.
 
-- **زرار التلخيص مثبّت تحت خالص**: مهما كان النص أو الملف كبير، الزرار دايمًا ظاهر في قاع الشاشة فوق شريط التبويبات — مش بيتسكرول ولا بيختفي.
-- **معاينة الملفات الكبيرة بتسرح**: لما تحمّل ملف كبير (فوق 8000 حرف) بتشوف أول 2000 حرف كمعاينة قابلة للتحديد والنسخ جوه الصفحة نفسها — السكرول يفضل شغال في أي حتة (النص الكامل بيتلخص عادي)، وزرار "مسح" بيرجّعك تكتب نص جديد.
-- **سكرول بار واضح** على الويندوز/اللينكس/الماك/الويب عشان تعرف إن فيه محتوى بيتسكرول.
+## Features
 
-## استجابة كاملة لكل الشاشات (موبايل / تابلت / لاب / كمبيوتر)
+- **Three input modes** — paste text, open TXT/CSV/MD files, read PDFs (with OCR fallback for scanned pages), or capture a page with the camera on mobile and web.
+- **Extractive summarizer engine** — pure Dart, 100% offline: word-frequency scoring with sentence positions, length penalty, and an opening-sentence bonus; returns 3–5 points in the original order.
+- **Original text preserved** — summary points show the sentence exactly as written, diacritics (تشكيل) and punctuation included.
+- **Simple explanation** — the core idea plus the top keywords, written in the language of the text itself.
+- **Reading history** — every summary is saved locally with instant search and one-tap delete.
+- **Bilingual & responsive** — Arabic-first UI (RTL) with full English support, adaptive layout from phones to desktop windows, dark mode included.
 
-| حجم الشاشة | التنقل | شاشة التلخيص | السجل |
-|---|---|---|---|
-| موبايل (< 600px) | شريط تحت | عمود واحد | عمود واحد |
-| تابلت/لاب ضيّق (600–1023) | شريط تحت | عمود موسّط بعرض مريح | كارتين جنب بعض |
-| لاب/كمبيوتر (≥ 1024px) | ريل جانبي (بيتمدد لاسماء جنب الأيقونات من 1400px) | عمودين: الإدخال جنب النتيجة (من 1200px) | كارتين جنب بعض |
+## Libraries
 
-- كل المحتوى موسّط بعرض أقصى مناسب على الشاشات الكبيرة — سطور قراءة مريحة بدل ما المحتوى يبصط على الشاشة كلها.
-- الاتجاه RTL/LTR والتقسيم بيتبدلوا تلقائيًا مع تغيير حجم النافذة (جرّب تسحب حدود النافذة على الويب/الويندوز).
+| Package | Purpose |
+|---|---|
+| [`flutter_bloc`](https://pub.dev/packages/flutter_bloc) | State management with the Cubit pattern |
+| [`get_it`](https://pub.dev/packages/get_it) | Dependency injection (Service Locator) |
+| [`dartz`](https://pub.dev/packages/dartz) | Functional error handling with `Either` |
+| [`equatable`](https://pub.dev/packages/equatable) | Value comparison for state objects |
+| [`uuid`](https://pub.dev/packages/uuid) | IDs for saved summaries |
+| [`shared_preferences`](https://pub.dev/packages/shared_preferences) | Local storage (history, theme, language) |
+| [`file_picker`](https://pub.dev/packages/file_picker) | Picking TXT / PDF files |
+| [`pdfrx`](https://pub.dev/packages/pdfrx) | PDF text extraction |
+| [`camera`](https://pub.dev/packages/camera) | Camera capture for OCR |
+| [`flutter_tesseract_ocr`](https://pub.dev/packages/flutter_tesseract_ocr) | On-device text recognition — fully offline, Arabic data bundled |
+| [`path_provider`](https://pub.dev/packages/path_provider) | Temp files for OCR images |
 
-## المنصات
+## Architecture
 
-| منصة | لصق | ملف txt | كاميرا/OCR | التلخيص |
-|---|---|---|---|---|
-| Android | ✅ | ✅ | ✅ أوفلاين (Tesseract مدمج) | ✅ أوفلاين |
-| Web | ✅ | ✅ | ✅ محرك Tesseract.js بيتحمّل مرة واحدة أول استخدام | ✅ أوفلاين |
-| Windows | ✅ | ✅ | — (التصوير مدعوم على الموبايل والويب) | ✅ أوفلاين |
-
-## التشغيل
-
-```bash
-flutter pub get
-flutter run                    # أندرويد
-flutter run -d chrome          # ويب
-flutter run -d windows         # ويندوز
-```
-
-## لو ظهرلك خطأ `Target of URI doesn't exist`
-
-الخطأ ده معناه إن الحزم (packages) لسه متنزّلتش على جهازك — الحل في أغلب الحالات:
-
-```bash
-flutter clean
-flutter pub get
-```
-
-وبعدها اعمل restart للـ IDE / Dart Analysis Server.
-
-- أقل إصدار Flutter مطلوب: **3.35** (Dart 3.9).
-- لو `flutter pub get` طلع error بتاع تعارض إصدارات، شغّل `flutter --version` وشوف الإصدار: المكتبة بتختار إصدار pdfrx المناسب تلقائيًا (2.2.24 يكفي Flutter 3.35+، والإصدارات الأحدث محتاجة Flutter أحدث).
-
-## البنية (نفس مدرسة مشروع الرحلات)
+The project follows **Clean Architecture** with every feature isolated in its own module:
 
 ```
 lib/
-├── main.dart                 # نقطة البداية + DI + الثيم واللغة المحفوظين
 ├── core/
-│   ├── constants/            # مسارات + مقاسات + نقاط توقف الاستجابة + مفاتيح التخزين
-│   ├── errors/               # Exceptions + Failures
-│   ├── localization/         # نصوص عربي/إنجليزي + LocaleCubit
-│   ├── routes/               # AppRouter
-│   ├── services/             # تخزين محلي + نافيجيشن + قراءة ملفات + OCR
-│   ├── summarizer/           # ⭐ محرك التلخيص الأوفلاين (عربي + إنجليزي)
-│   ├── theme/                # ثيم فاتح/غامق + ThemeCubit
-│   ├── utils/                # get_it service locator
-│   └── widgets/              # ويدجت مشتركة: الاستجابة + سلوك السكرول
+│   ├── summarizer/      # The extraction engine — pure Dart, no Flutter needed
+│   ├── services/        # File reading, PDF pipeline, OCR, type detection
+│   ├── localization/    # Arabic / English strings + locale cubit
+│   ├── theme/           # Light & dark themes + theme cubit
+│   ├── di/              # Service locator wiring
+│   └── errors/          # Failures & exceptions
 └── features/
-    ├── summarize/            # الشاشة الرئيسية: إدخال → نقاط + شرح
-    ├── history/              # السجل: حفظ + بحث + حذف
-    └── settings/             # الثيم + اللغة
+    ├── summarize/       # Input, capture, and the result screen
+    ├── history/         # Saved summaries + search
+    └── settings/        # Theme & language
 ```
 
-## الاختبارات والـ CI/CD
+Each feature is internally split into: `presentation` (UI & state) ← `domain` (business logic) ← `data` (data sources & storage).
 
-المشروع متغطي باختبارات وحدة وويدجت على نفس مستوى الكود (bloc_test + mocktail):
+## Getting Started
+
+```bash
+# Requirements: Flutter 3.35 or newer (Dart 3.9+)
+flutter pub get
+flutter run
+```
+
+Supported platforms: **Android, Web, Windows**.
+
+## Tests
 
 ```bash
 flutter test
 ```
 
-وعليه خط أنابيب GitHub Actions (`.github/workflows/ci.yml`):
+The suite covers the summarizer engine, file decoding (UTF-8 / UTF-16 / Windows-1256 with BOM handling), file-type detection, Cubits, and the PDF pipeline.
 
-- على كل PR أو ضغطة: `flutter analyze` (صفر تحذيرات) + `flutter test --coverage` (تقرير التغطية بيرفع كأرتيفاكت).
-- على الضغطات على main/master: بناء تجريبي إضافي — `flutter build apk --debug` + `flutter build web` — والـ APK بيرفع كأرتيفاكت.
-- لو رفعت المشروع على حسابك: بدّل `USERNAME` في شارة الـ CI فوق باسم حسابك.
+## CI
 
-### ارفع المشروع على GitHub عشان الـ CI يشتغل
-
-الـ CI بيجري على GitHub نفسه — محتاج ترفع الكود مرة واحدة بس (التجاهل متظبط في `.gitignore`، فملفات البناء والمؤقتة مش هتترفع):
-
-```bash
-git init
-git add .
-git commit -m "ببساطة v1.0.0 — تطبيق تلخيص أوفلاين"
-git branch -M main
-git remote add origin https://github.com/USERNAME/besbasa.git
-git push -u origin main
-```
-
-وبعدها افتح تاب **Actions** في صفحة المستودع — هتلاقي التشغيل الأول شغال: تحليل ← اختبار ← بناء. أول تشغيل بياخد وقت (بينزّل Flutter)، واللي بعده أسرع بكتير بفضل الكاش. الـ APK وتقرير التغطية بتنزّلهم من صفحة التشغيل تحت **Artifacts**.
-
-## الخصوصية
-
-- النصوص بتتحلل على الجهاز فقط ولا تُرسل لأي مكان.
-- الصورة الملتقطة بتتحول لنص وتُحذف فورًا بعد الـ OCR.
-- السجل محفوظ في ذاكرة الجهاز (shared_preferences) ويمكن مسحه في أي وقت.
+Every push runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml): `flutter analyze` (zero warnings enforced), `flutter test --coverage` (report available in Artifacts), and on pushes to `main` — debug APK + web builds as downloadable artifacts.

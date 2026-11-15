@@ -1,0 +1,63 @@
+name: besbasa
+description: "ببساطة — تطبيق أوفلاين يلخص أي منهج أو نص طويل ببساطة شديدة: نقاط قليلة + شرح مبسط. يعمل بدون إنترنت ويدعم العربية والإنجليزية."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State Management & DI
+  flutter_bloc: ^9.1.1
+  equatable: ^2.1.0
+  dartz: ^0.10.1
+  get_it: ^9.2.1
+  uuid: ^4.5.1
+
+  # Local Storage (سجل الملخصات + الثيم + اللغة — كلها محلية)
+  shared_preferences: ^2.5.3
+
+  # إدخال النص: ملفات txt محليًا
+  file_picker: ^8.1.7
+
+  # OCR أوفلاين: Tesseract على الموبايل (ملفات اللغة مدمجة) و Tesseract.js على الويب
+  camera: ^0.11.2+1
+  flutter_tesseract_ocr: ^0.4.31
+  # pdfrx: نفس الـ API من 2.2.24 لـ 2.11.0 — pub هيختار أحدث إصدار متوافق
+  # مع Flutter بتاعك (2.2.24 يكفي Flutter 3.35+، و2.11.0 محتاج Flutter 3.47+)
+  pdfrx: ^2.2.24
+
+  # ملفات مؤقتة لصور الـ OCR الناتجة من PDF ممسوح ضوئيًا (موبايل)
+  path_provider: ^2.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.5
+  bloc_test: ^10.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    # ملفات لغة Tesseract المدمجة — قراءة الصور أوفلاين بالكامل على الموبايل
+    - assets/tessdata_config.json
+    - assets/tessdata/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700

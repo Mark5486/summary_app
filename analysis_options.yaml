@@ -1,0 +1,15 @@
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - web/**
+    - windows/**
+include: package:flutter_lints/flutter.yaml
+
+# نفس روح مشروع الرحلات: تنظيف صارم — صفر تحذيرات.
+linter:
+  rules:
+    public_member_api_docs: false
+    lines_longer_than_80_chars: false
+    avoid_print: true
+    prefer_single_quotes: true

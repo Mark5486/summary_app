@@ -1,0 +1,103 @@
+# ──────────────────────────────────────────────────────────────
+# ببساطة — خط التكامل المستمر (CI/CD)
+#
+# بيشتغل تلقائيًا مع كل push أو Pull Request على main/master:
+#
+#   مهمة 1 — الجودة:
+#     1) flutter analyze — أي تحذير بيفشل التشغيل
+#     2) flutter test --coverage — كل الاختبارات + تقرير التغطية
+#        بيرفع كأرتيفاكت تنزّله من صفحة التشغيل
+#
+#   مهمة 2 — البناء (الضغطات على main/master بس، وبعد نجاح مهمة 1):
+#     3) flutter build apk --debug — إثبات إن الأندرويد بيتجمّع
+#     4) flutter build web — إثبات إن الويب بيتجمّع
+#     5) الـ APK بيرفع كأرتيفاكت تنزّله من صفحة التشغيل
+#
+# الإصدار مثبّت على 3.35.0 (الحد الأدنى الموثّق في الـ README)
+# عشان النتايج تبقى متوقعة ومتكررة في كل تشغيل.
+# ──────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# لو عملت push جديد قبل التشغيل القديم يخلص — الغيه وفّر وقت.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze-and-test:
+    name: تحليل + اختبار + تغطية
+    runs-on: ubuntu-latest
+    steps:
+      # 1) جيب الكود من المستودع
+      - uses: actions/checkout@v4
+
+      # 2) Flutter 3.35.0 مع كاش — بينزّل الـ SDK مرة وبيرجّعه من الكاش
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.35.0
+          channel: stable
+          cache: true
+
+      # 3) نزّل الحزم حسب pubspec.yaml
+      - name: تحميل الحزم
+        run: flutter pub get
+
+      # 4) تحليل الكود — صفر تحذيرات
+      - name: تحليل الكود
+        run: flutter analyze
+
+      # 5) الاختبارات الـ 15 مع تقرير التغطية (coverage/lcov.info)
+      - name: الاختبارات مع تقرير التغطية
+        run: flutter test --coverage
+
+      # 6) تقرير التغطية يتنزّل من صفحة الـ run تحت "Artifacts"
+      - name: رفع تقرير التغطية
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/lcov.info
+
+  build:
+    name: بناء APK + Web
+    needs: analyze-and-test # ميبنيش غير لو التحليل والاختبارات نجحوا
+    if: github.event_name == 'push' # البناء على الضغطات بس — مش كل PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Java 17 — مطلوب لبناء الأندرويد (Gradle/AGP)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.35.0
+          channel: stable
+          cache: true
+
+      - name: تحميل الحزم
+        run: flutter pub get
+
+      # APK تجريبي — بيثبت إن التجميع كامل (كود + أصول + إضافات) شغال
+      - name: بناء APK
+        run: flutter build apk --debug
+
+      # نسخة الويب — التطبيق مدعوم على Chrome من غير أي تعديل
+      - name: بناء نسخة الويب
+        run: flutter build web
+
+      # الـ APK يتنزّل من صفحة الـ run تحت "Artifacts"
+      - name: رفع الـ APK كناتج
+        uses: actions/upload-artifact@v4
+        with:
+          name: besbasa-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk

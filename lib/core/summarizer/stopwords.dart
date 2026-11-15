@@ -1,0 +1,41 @@
+/// قوائم كلمات التوقف (stopwords) — كلمات شائعة مالهاش قيمة في التلخيص.
+/// كل الكلمات العربية هنا متطبّعة مسبقًا بنفس قواعد ArabicNormalizer
+/// (أ إ آ → ا، ى → ي، ة → ه) عشان المقارنة تشتغل صح.
+abstract final class Stopwords {
+  /// عربي (فصحى + أشهر الكلمات الوصلية).
+  static const Set<String> arabic = {
+    'في','من','علي','الي','عن','مع','هذا','هذه','ذلك','تلك','التي','الذي',
+    'الذين','هو','هي','هم','هن','انا','انت','نحن','كان','كانت','يكون','تكون',
+    'ما','لا','لم','لن','ان','اذا','كل','بعض','غير','بين','حتي','كما','لقد',
+    'قد','ثم','او','ام','بل','لكن','اليها','اليه','فيها','فيه','منها','منه',
+    'لها','له','بها','به','هناك','هنا','ايضا','حول','دون','خلال','بعد','قبل',
+    'عند','عندما','لان','كي','ذات','ذو','ذي','سوف','ربما','بعدما','حين',
+    'حينها','ضمن','نحو','تجاه','عبر','فقط','جدا','وهو','وهي','وقد','ولقد',
+    'ولا','وما','وكان','وكانت','اي','ايه','الان','دائما','ابدا','مثل',
+    'مثلا','نفس','حاله','حالها','خارج','داخل','امام','خلف','فوق','تحت',
+    'بجوار','لدى','لدي','عليها','عليه','بهما','فيهما','منهما','اليهم',
+    'لذلك','بذلك','وان','وايضا','زي','اللي','ده','دي','هما','لما','كلما',
+    'عشان','علشان','بس','كده','الا',
+  };
+
+  /// إنجليزي — أساسي وكافي للنصوص الدراسية.
+  static const Set<String> english = {
+    'the','a','an','and','or','but','if','then','else','when','while','of',
+    'to','in','on','at','by','for','with','about','against','between','into',
+    'through','during','before','after','above','below','from','up','down',
+    'out','off','over','under','again','further','once','here','there','all',
+    'any','both','each','few','more','most','other','some','such','no','nor',
+    'not','only','own','same','so','than','too','very','can','will','just',
+    'is','are','was','were','be','been','being','have','has','had','having',
+    'do','does','did','doing','would','should','could','ought','i','you',
+    'he','she','it','we','they','them','his','her','its','our','their','this',
+    'that','these','those','am','what','which','who','whom','as','until',
+    'because','also','may','might','must','shall',
+  };
+
+  /// هل الكلمة (بعد التطبيع) كلمة توقف؟
+  static bool isStopword(String normalizedWord) {
+    return arabic.contains(normalizedWord) ||
+        english.contains(normalizedWord.toLowerCase());
+  }
+}

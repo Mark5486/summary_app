@@ -1,0 +1,36 @@
+# ── ببساطة — ملف التجاهل القياسي لمشاريع Flutter ──
+# الهدف: الكود بس هو اللي يترفع على GitHub — ملفات البناء
+# والمؤقتة والمحلية بتتولد عندك على أي حال وبتاخد مساحة.
+
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+**/doc/api/
+
+# ملفات البناء على أندرويد
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# رموز الترميز (obfuscation)
+app.*.symbols
+app.*.map.json
+
+# ملفات سجلات
+*.log

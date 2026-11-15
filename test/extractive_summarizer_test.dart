@@ -232,7 +232,7 @@ void main() {
         expect(
           englishSignedText.contains(p),
           isTrue,
-          reason: 'point was normalized before display: $p',
+          reason: 'Original text does not contain this point: "$p"',
         );
       }
       expect(result.points.join(' ').contains("Don't"), isTrue);

@@ -9,7 +9,7 @@ import '../../../../core/localization/cubit/locale_cubit.dart';
 import '../../../../core/localization/cubit/locale_state.dart';
 import '../../../../core/widgets/responsive.dart';
 
-/// شاشة الإعدادات: الثيم + اللغة + ملاحظة الخصوصية.
+/// شاشة الإعدادات: الثيم + اللغة.
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
@@ -93,25 +93,6 @@ class SettingsView extends StatelessWidget {
                   },
                 ),
 
-                const SizedBox(height: 24),
-
-                // ─── شارة أوفلاين + الخصوصية ───
-                Center(
-                  child: Chip(
-                    avatar: Icon(
-                      Icons.wifi_off,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    label: Text(s.offlineBadge),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  s.privacyNote,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.hint(context),
-                ),
               ],
             ),
           ),

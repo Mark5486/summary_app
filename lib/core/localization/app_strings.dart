@@ -159,9 +159,4 @@ class AppStrings {
   String get language => isArabic ? 'اللغة' : 'Language';
   String get arabic => isArabic ? 'العربية' : 'Arabic';
   String get english => isArabic ? 'الإنجليزية' : 'English';
-  String get privacyNote => isArabic
-      ? '🔒 كل حاجة بتحصل على جهازك — مفيش إنترنت ومفيش سيرفر ومفيش بيانات بتتخزن في أي حتة تانية.'
-      : '🔒 Everything happens on your device — no internet, no server, no data leaves your phone.';
-  String get offlineBadge =>
-      isArabic ? 'يعمل بدون إنترنت' : 'Works offline';
 }

@@ -136,6 +136,10 @@ class AppStrings {
       ? 'صلاحية الكاميرا مرفوضة — افتح إعدادات النظام واسمح بيها.'
       : 'Camera permission denied — open system settings and allow it.';
 
+  String get noCamera => isArabic
+      ? 'مفيش كاميرا متاحة على الجهاز — الصق النص أو افتح ملف بدل التصوير.'
+      : 'No camera available on this device — paste text or open a file instead.';
+
   // ───────────────────────── السجل ─────────────────────────
   String get historyTitle => isArabic ? 'سجل الملخصات' : 'Summary history';
   String get searchHint => isArabic ? 'ابحث في السجل…' : 'Search history…';

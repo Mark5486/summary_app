@@ -64,7 +64,10 @@ class FileTypeDetector {
     if (b[0] == 0x00 && b[1] == 0x00 && b[2] == 0x01 && b[3] == 0x00) {
       return true; // ICO
     }
-    if (b[0] == 0x42 && b[1] == 0x4D && b.length > 14) {
+    // ⚠️ محتاجين بايتات 14..17 للـ DIB header — فالطول لازم ≥ 18.
+    // قبل كده كان الشرط > 14 وده بيقرأ بره حدود أي ملف نصي بيبدأ
+    // بـ "BM" طوله 15–17 بايت ويعمل RangeError كراش.
+    if (b[0] == 0x42 && b[1] == 0x4D && b.length >= 18) {
       // BMP — بنشيك على الـ DIB header عشان "BM..." النصية ما تتضربش غلط
       final dibSize = b[14] | (b[15] << 8) | (b[16] << 16) | (b[17] << 24);
       if (dibSize == 12 || dibSize == 40 || dibSize == 108 || dibSize == 124) {

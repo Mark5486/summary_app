@@ -115,7 +115,7 @@ class _CapturePageState extends State<CapturePage> {
                     const SizedBox(height: AppSizes.paddingMedium),
                     Text(
                       _error == 'no_camera'
-                          ? s.noTextFound
+                          ? s.noCamera
                           : s.cameraPermissionDenied,
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: Colors.white70),

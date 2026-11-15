@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:besbasa/features/summarize/presentation/cubit/summarize_cubit.dart';
 import 'package:besbasa/features/summarize/presentation/cubit/summarize_state.dart';
 import 'package:besbasa/features/summarize/presentation/view/summarize_view.dart';
-import 'package:mocktail/mocktail.dart';
 
 class _MockSummarizeCubit extends MockCubit<SummarizeState>
     implements SummarizeCubit {}

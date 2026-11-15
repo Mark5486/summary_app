@@ -99,6 +99,7 @@ class SummarizeRepositoryImpl implements SummarizeRepository {
             ..write(text)
             ..writeln();
         } on NoTextFoundException {
+          // Skip pages that contain no recognizable text.
         } finally {
           await disposeOcrImage(image);
         }

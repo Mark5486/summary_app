@@ -17,18 +17,14 @@ Future<void> main() async {
 
   await setupServiceLocator();
 
-  // تحميل الثيم واللغة المحفوظين قبل أول إطار — يمنع الوميض.
   final themeCubit = getIt<ThemeCubit>();
   final localeCubit = getIt<LocaleCubit>();
   await themeCubit.ensureLoaded();
   await localeCubit.ensureLoaded();
 
-  runApp(
-    BesbasaApp(themeCubit: themeCubit, localeCubit: localeCubit),
-  );
+  runApp(BesbasaApp(themeCubit: themeCubit, localeCubit: localeCubit));
 }
 
-/// جذر التطبيق — الثيم واللغة محفوظين ومعروضين من أول لحظة.
 class BesbasaApp extends StatelessWidget {
   final ThemeCubit themeCubit;
   final LocaleCubit localeCubit;
@@ -54,10 +50,8 @@ class BesbasaApp extends StatelessWidget {
                 title: 'ببساطة',
                 debugShowCheckedModeBanner: false,
 
-                // سكرول بار دايم الظهور على الديسكتوب/الويب (مهمة 3).
                 scrollBehavior: const AppScrollBehavior(),
 
-                // اللغة: عربي افتراضي + إنجليزي بديل — من LocaleCubit.
                 locale: Locale(localeState.languageCode),
                 supportedLocales: const [Locale('ar'), Locale('en')],
                 localizationsDelegates: const [
@@ -66,7 +60,6 @@ class BesbasaApp extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
 
-                // الثيمات المخصصة — فاتح وغامق.
                 theme: LightTheme.theme,
                 darkTheme: DarkTheme.theme,
                 themeMode: themeState.mode,

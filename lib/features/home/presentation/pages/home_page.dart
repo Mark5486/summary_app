@@ -10,13 +10,6 @@ import '../../../settings/presentation/view/settings_view.dart';
 import '../../../summarize/presentation/cubit/summarize_cubit.dart';
 import '../../../summarize/presentation/view/summarize_view.dart';
 
-/// شل التطبيق — متكيّف مع حجم الشاشة (مهمة 5):
-///
-/// - موبايل/تابلت: 3 تبويبات في NavigationBar تحت (أريح لليد).
-/// - لاب/كمبيوتر: NavigationRail جانبي بياخد مساحته الطبيعية،
-///   وبيتمدد لأسماء ظاهرة جنب الأيقونات على الشاشات العريضة أوي.
-///
-/// الـ Cubits بتتملك هنا عشان التلخيص والسجل يتكلموا مع بعض بحرية.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -29,27 +22,27 @@ class _HomePageState extends State<HomePage> {
 
   void _selectTab(BuildContext context, int i) {
     setState(() => _index = i);
-    // كل ما نرجع للسجل نحمّل أحدث الملخصات (فيه حفظ تلقائي).
+
     if (i == 1) context.read<HistoryCubit>().load();
   }
 
   List<NavigationRailDestination> _railDestinations(AppStrings s) => [
-        NavigationRailDestination(
-          icon: const Icon(Icons.auto_stories_outlined),
-          selectedIcon: const Icon(Icons.auto_stories),
-          label: Text(s.tabSummarize),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.history_outlined),
-          selectedIcon: const Icon(Icons.history),
-          label: Text(s.tabHistory),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.settings_outlined),
-          selectedIcon: const Icon(Icons.settings),
-          label: Text(s.tabSettings),
-        ),
-      ];
+    NavigationRailDestination(
+      icon: const Icon(Icons.auto_stories_outlined),
+      selectedIcon: const Icon(Icons.auto_stories),
+      label: Text(s.tabSummarize),
+    ),
+    NavigationRailDestination(
+      icon: const Icon(Icons.history_outlined),
+      selectedIcon: const Icon(Icons.history),
+      label: Text(s.tabHistory),
+    ),
+    NavigationRailDestination(
+      icon: const Icon(Icons.settings_outlined),
+      selectedIcon: const Icon(Icons.settings),
+      label: Text(s.tabSettings),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +53,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<SummarizeCubit>(
           create: (_) {
             final cubit = getIt<SummarizeCubit>();
-            // آخر ملخص من السجل بيفضل ظاهر على الهوم — هادئة تمامًا
-            // ومبتحصلش لو المستخدم فتح التطبيق وإيدو على إدخال قديم.
+
             cubit.restoreLastSummary();
             return cubit;
           },
@@ -74,14 +66,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           final tabs = IndexedStack(
             index: _index,
-            children: const [
-              SummarizeView(),
-              HistoryView(),
-              SettingsView(),
-            ],
+            children: const [SummarizeView(), HistoryView(), SettingsView()],
           );
 
-          // ─── لاب / كمبيوتر: ريل جانبي ───
           if (context.isExpanded) {
             final width = context.screenWidth;
             final extended = width >= 1400;
@@ -91,8 +78,7 @@ class _HomePageState extends State<HomePage> {
                   NavigationRail(
                     selectedIndex: _index,
                     onDestinationSelected: (i) => _selectTab(context, i),
-                    // من 1400 فوق: الاسم ظاهر جنب الأيقونة —
-                    // وأقل من كده: الاسم تحت الأيقونة (ريل ضيّق).
+
                     extended: extended,
                     labelType: extended
                         ? NavigationRailLabelType.none
@@ -106,7 +92,6 @@ class _HomePageState extends State<HomePage> {
             );
           }
 
-          // ─── موبايل / تابلت: شريط تحت (التصميم الأصلي) ───
           return Scaffold(
             body: tabs,
             bottomNavigationBar: NavigationBar(

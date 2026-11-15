@@ -1,6 +1,5 @@
 import '../../../../core/summarizer/extractive_summarizer.dart';
 
-/// موديل التخزين — نفس حقول Summary لكن قابل للتحويل JSON محليًا.
 class SummaryModel {
   final String id;
   final int createdAtMs;
@@ -22,29 +21,29 @@ class SummaryModel {
     required this.summaryWordCount,
   });
 
-  /// ⚡ السجل بيخزن أول 300 حرف من النص الأصلي بس — النص الكامل مش
-  /// محتاجينه بعد التلخيص، وده بيخلي التخزين خفيف وسريع (ريفيو:
-  /// كان التخزين بينفخ من 0.4 لـ 3.4 ميجا ويقرّب من حد localStorage).
   static const int maxStoredChars = 300;
 
   static String _trimForStorage(String text) => text.length <= maxStoredChars
       ? text
       : '${text.substring(0, maxStoredChars)}…';
 
-  /// نسخة مقصوصة للتخزين — بتتستخدم في تنظيف الإدخالات القديمة.
   SummaryModel trimmedForStorage() => SummaryModel(
-        id: id,
-        createdAtMs: createdAtMs,
-        originalText: _trimForStorage(originalText),
-        points: points,
-        explanation: explanation,
-        keywords: keywords,
-        originalWordCount: originalWordCount,
-        summaryWordCount: summaryWordCount,
-      );
+    id: id,
+    createdAtMs: createdAtMs,
+    originalText: _trimForStorage(originalText),
+    points: points,
+    explanation: explanation,
+    keywords: keywords,
+    originalWordCount: originalWordCount,
+    summaryWordCount: summaryWordCount,
+  );
 
-  factory SummaryModel.fromSummary(String id, DateTime createdAt,
-      String originalText, SummaryResult result) {
+  factory SummaryModel.fromSummary(
+    String id,
+    DateTime createdAt,
+    String originalText,
+    SummaryResult result,
+  ) {
     return SummaryModel(
       id: id,
       createdAtMs: createdAt.millisecondsSinceEpoch,
@@ -62,8 +61,9 @@ class SummaryModel {
       id: json['id'] as String,
       createdAtMs: json['createdAtMs'] as int,
       originalText: json['originalText'] as String? ?? '',
-      points:
-          (json['points'] as List<dynamic>? ?? const []).cast<String>().toList(),
+      points: (json['points'] as List<dynamic>? ?? const [])
+          .cast<String>()
+          .toList(),
       explanation: json['explanation'] as String? ?? '',
       keywords: (json['keywords'] as List<dynamic>? ?? const [])
           .cast<String>()
@@ -74,17 +74,16 @@ class SummaryModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'createdAtMs': createdAtMs,
-        'originalText': originalText,
-        'points': points,
-        'explanation': explanation,
-        'keywords': keywords,
-        'originalWordCount': originalWordCount,
-        'summaryWordCount': summaryWordCount,
-      };
+    'id': id,
+    'createdAtMs': createdAtMs,
+    'originalText': originalText,
+    'points': points,
+    'explanation': explanation,
+    'keywords': keywords,
+    'originalWordCount': originalWordCount,
+    'summaryWordCount': summaryWordCount,
+  };
 
-  /// بحث نصي بسيط في الأصل والنقاط والشرح — محلي بالكامل.
   bool matches(String query) {
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return true;

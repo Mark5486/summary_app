@@ -13,19 +13,18 @@ class _MockSummarizeCubit extends MockCubit<SummarizeState>
     implements SummarizeCubit {}
 
 Summary _makeSummary() => Summary(
-      id: 'sid-1',
-      createdAt: DateTime(2026, 11, 1),
-      originalText: 'نص أصلي طويل للتلخيص التجريبي.',
-      result: const SummaryResult(
-        points: ['النيل أطول نهر', 'السد العالي يحمي مصر'],
-        explanation: 'الفكرة: النيل ومصر',
-        keywords: ['النيل'],
-        originalWordCount: 50,
-        summaryWordCount: 8,
-      ),
-    );
+  id: 'sid-1',
+  createdAt: DateTime(2026, 11, 1),
+  originalText: 'نص أصلي طويل للتلخيص التجريبي.',
+  result: const SummaryResult(
+    points: ['النيل أطول نهر', 'السد العالي يحمي مصر'],
+    explanation: 'الفكرة: النيل ومصر',
+    keywords: ['النيل'],
+    originalWordCount: 50,
+    summaryWordCount: 8,
+  ),
+);
 
-/// بيرسم القسم بحالة cubit متحاكمة ويرجّع الموك عشان التحقق من النداءات.
 Future<_MockSummarizeCubit> _pumpSection(
   WidgetTester tester, {
   required bool restoredFromHistory,
@@ -70,36 +69,31 @@ Future<_MockSummarizeCubit> _pumpSection(
 
 void main() {
   group('SummaryResultSection', () {
-    testWidgets('النتيجة الجديدة: عنوان القسم + شارة الحفظ + من غير زرار مسح',
-        (tester) async {
+    testWidgets('النتيجة الجديدة: عنوان القسم + شارة الحفظ + من غير زرار مسح', (
+      tester,
+    ) async {
       await _pumpSection(tester, restoredFromHistory: false);
 
-      // عنوان القسم للنتيجة الحديثة.
       expect(find.text('النتيجة'), findsOneWidget);
 
-      // شارة الحفظ التلقائي في السجل.
       expect(find.text('محفوظ في السجل ✓'), findsOneWidget);
 
-      // محتوى الملخص نفسه ظاهر.
       expect(find.text('النيل أطول نهر'), findsOneWidget);
       expect(find.text('الفكرة: النيل ومصر'), findsOneWidget);
 
-      // زرار مسح من الهوم مفيش لنتيجة حديثة.
       expect(find.byIcon(Icons.delete_outline), findsNothing);
     });
 
-    testWidgets('آخر ملخص المترجّع: عنوان مختلف + زرار مسح من الهوم',
-        (tester) async {
+    testWidgets('آخر ملخص المترجّع: عنوان مختلف + زرار مسح من الهوم', (
+      tester,
+    ) async {
       final cubit = await _pumpSection(tester, restoredFromHistory: true);
 
-      // عنوان القسم المترجّع من السجل.
       expect(find.text('آخر ملخص من السجل'), findsOneWidget);
 
-      // من غير شارة حفظ — زرار المسح مكانها.
       expect(find.text('محفوظ في السجل ✓'), findsNothing);
       expect(find.byIcon(Icons.delete_outline), findsOneWidget);
 
-      // الضغط على المسح بينادي dismissRestoredSummary — والسجل مبيتلمس.
       await tester.tap(find.byIcon(Icons.delete_outline));
       await tester.pump();
 

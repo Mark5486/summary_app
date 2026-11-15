@@ -36,17 +36,19 @@ void main() {
     deleteSummary = _MockDeleteSummary();
     clearHistory = _MockClearHistory();
 
-    when(() => deleteSummary.call(any()))
-        .thenAnswer((_) async => const Right<Failure, void>(null));
-    when(() => clearHistory.call())
-        .thenAnswer((_) async => const Right<Failure, void>(null));
+    when(
+      () => deleteSummary.call(any()),
+    ).thenAnswer((_) async => const Right<Failure, void>(null));
+    when(
+      () => clearHistory.call(),
+    ).thenAnswer((_) async => const Right<Failure, void>(null));
   });
 
   HistoryCubit buildCubit() => HistoryCubit(
-        getHistoryUseCase: getHistory,
-        deleteSummaryUseCase: deleteSummary,
-        clearHistoryUseCase: clearHistory,
-      );
+    getHistoryUseCase: getHistory,
+    deleteSummaryUseCase: deleteSummary,
+    clearHistoryUseCase: clearHistory,
+  );
 
   group('HistoryCubit', () {
     test('الحالة الأولية فاضية', () {
@@ -59,7 +61,6 @@ void main() {
     blocTest<HistoryCubit, HistoryState>(
       'load بيحمّل المدخلات مرتّبة الأحدث الأول',
       setUp: () {
-        // الموديل بيرجّع القايمة زي ما الـ DataSource بيرتبها (الأحدث الأول).
         when(() => getHistory.call()).thenAnswer(
           (_) async => Right([
             _entry('new', 'ملخص جديد', ms: 1730000001000),
@@ -102,9 +103,9 @@ void main() {
     blocTest<HistoryCubit, HistoryState>(
       'delete بيشيل من القايمة ويطلع توست',
       setUp: () {
-        when(() => getHistory.call()).thenAnswer(
-          (_) async => Right([_entry('a', 'نص عن النيل')]),
-        );
+        when(
+          () => getHistory.call(),
+        ).thenAnswer((_) async => Right([_entry('a', 'نص عن النيل')]));
       },
       build: buildCubit,
       act: (cubit) async {
@@ -125,9 +126,9 @@ void main() {
     blocTest<HistoryCubit, HistoryState>(
       'clearAll بيفضّي السجل والبحث',
       setUp: () {
-        when(() => getHistory.call()).thenAnswer(
-          (_) async => Right([_entry('a', 'نص')]),
-        );
+        when(
+          () => getHistory.call(),
+        ).thenAnswer((_) async => Right([_entry('a', 'نص')]));
       },
       build: buildCubit,
       act: (cubit) async {
@@ -139,8 +140,7 @@ void main() {
         predicate<HistoryState>((s) => s.entries.length == 1),
         predicate<HistoryState>((s) => s.query == 'نص'),
         predicate<HistoryState>(
-          (s) =>
-              s.entries.isEmpty && s.query.isEmpty && s.toast == 'deleted',
+          (s) => s.entries.isEmpty && s.query.isEmpty && s.toast == 'deleted',
         ),
       ],
     );

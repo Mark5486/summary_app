@@ -1,7 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// غلاف بسيط فوق shared_preferences — نفس مدرسة مشروع الرحلات.
-/// كل التطبيق أوفلاين فمفيش غير تخزين محلي خالص.
 abstract class LocalStorageService {
   Future<void> setString(String key, String value);
 

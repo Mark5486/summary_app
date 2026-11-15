@@ -9,7 +9,6 @@ import '../../../../core/localization/cubit/locale_cubit.dart';
 import '../../../../core/localization/cubit/locale_state.dart';
 import '../../../../core/widgets/responsive.dart';
 
-/// شاشة الإعدادات: الثيم + اللغة.
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
 
@@ -22,22 +21,21 @@ class SettingsView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // توسيط المحتوى على الشاشات الكبيرة (مهمة 6) — الإعدادات
-          // شكلها أحلى بعرض محدود وموسّط بدل ما تبصط على الشاشة.
           ResponsiveCenter(
             maxWidth: 560,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // ─── الوضع الغامق ───
                 BlocBuilder<ThemeCubit, ThemeState>(
                   builder: (context, themeState) {
                     return Card(
                       child: SwitchListTile(
                         secondary: const Icon(Icons.dark_mode_outlined),
-                        title:
-                            Text(s.darkMode, style: AppTextStyles.body(context)),
+                        title: Text(
+                          s.darkMode,
+                          style: AppTextStyles.body(context),
+                        ),
                         value: themeState.mode == ThemeMode.dark,
                         onChanged: (_) => context.read<ThemeCubit>().toggle(),
                       ),
@@ -47,13 +45,11 @@ class SettingsView extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                // ─── اللغة ───
                 BlocBuilder<LocaleCubit, LocaleState>(
                   builder: (context, localeState) {
                     return Card(
                       child: Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -61,8 +57,10 @@ class SettingsView extends StatelessWidget {
                               children: [
                                 const Icon(Icons.language),
                                 const SizedBox(width: 16),
-                                Text(s.language,
-                                    style: AppTextStyles.body(context)),
+                                Text(
+                                  s.language,
+                                  style: AppTextStyles.body(context),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 12),
@@ -81,9 +79,9 @@ class SettingsView extends StatelessWidget {
                               ],
                               selected: {localeState.languageCode},
                               onSelectionChanged: (selection) {
-                                context
-                                    .read<LocaleCubit>()
-                                    .setLanguage(selection.first);
+                                context.read<LocaleCubit>().setLanguage(
+                                  selection.first,
+                                );
                               },
                             ),
                           ],
@@ -92,7 +90,6 @@ class SettingsView extends StatelessWidget {
                     );
                   },
                 ),
-
               ],
             ),
           ),

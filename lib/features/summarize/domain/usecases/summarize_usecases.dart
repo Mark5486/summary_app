@@ -7,7 +7,6 @@ import '../../../../core/services/file_text_service.dart';
 import '../entities/summary.dart';
 import '../repositories/summarize_repository.dart';
 
-/// حالة الاستخدام: لخّص نصًا — نقاط قليلة + شرح مبسط.
 class SummarizeTextUseCase {
   final SummarizeRepository repository;
 
@@ -17,7 +16,6 @@ class SummarizeTextUseCase {
       repository.summarize(text);
 }
 
-/// حالة الاستخدام: افتح ملفًا محليًا (txt أو PDF) واستخرج نصّه.
 class ExtractTextFromFileUseCase {
   final SummarizeRepository repository;
 
@@ -27,7 +25,6 @@ class ExtractTextFromFileUseCase {
       repository.extractFromFile();
 }
 
-/// حالة الاستخدام: اقرأ نصًا من صورة متصوّرة (OCR أوفلاين).
 class ExtractTextFromImageUseCase {
   final SummarizeRepository repository;
 
@@ -37,7 +34,6 @@ class ExtractTextFromImageUseCase {
       repository.extractFromImage(image);
 }
 
-/// حالة الاستخدام: OCR على صفحات PDF ممسوح ضوئيًا — اختياري وبشريط تقدّم.
 class ExtractOcrFromScannedPdfUseCase {
   final SummarizeRepository repository;
 
@@ -46,6 +42,5 @@ class ExtractOcrFromScannedPdfUseCase {
   Future<Either<Failure, String>> call(
     Uint8List pdfBytes, {
     required void Function(double progress) onProgress,
-  }) =>
-      repository.ocrScannedPdf(pdfBytes, onProgress: onProgress);
+  }) => repository.ocrScannedPdf(pdfBytes, onProgress: onProgress);
 }

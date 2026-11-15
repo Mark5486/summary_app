@@ -6,8 +6,6 @@ import 'package:besbasa/core/services/file_text_service.dart';
 import 'package:besbasa/core/services/file_type_detector.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// اختبارات فك ترميز الملفات — خصوصًا الحاجات اللي كانت بتطلع رموز:
-/// UTF-16 (ملفات Notepad "Unicode") والملفات الغير نصية.
 void main() {
   group('FileTextServiceImpl.decodeBytes', () {
     final arabicText =
@@ -54,14 +52,11 @@ void main() {
     });
 
     test('Windows-1256 بيترجع حروف عربية', () {
-      // م / ل / ا في جدول cp1256: 0xE3 / 0xE1 / 0xC7.
       final bytes = Uint8List.fromList([0xE3, 0xE1, 0xC7]);
       expect(FileTextServiceImpl.decodeBytes(bytes), 'ملا');
     });
 
     test('ملف binary (رموز تحكم) بيرفض برسالة واضحة مش يتلخص عباريض', () {
-      // بايتات تحكم + ASCII من غير ولا حرف — مفيش أصفار فمش UTF-16،
-      // وUTF-8 بيقبلها لأنها كلها < 0x80.
       final pattern = [0x01, 0x02, 0x7F, 0x0B, 0x0C, 0x1F, 0x2E, 0x3A];
       final bytes = Uint8List.fromList(
         List.generate(320, (i) => pattern[i % pattern.length]),
@@ -74,8 +69,6 @@ void main() {
     });
 
     test('ملف PDF (%PDF) بيتكشف من الماجيك نمبر — مش نص', () {
-      // الريفيو: كشف النوع من أول بايتات مش من الامتداد — الـ PDF
-      // بيروح لقارئ الـ PDF، مش بيتفكّ cp1256 تاني.
       final pdfHeader = utf8.encode(
         '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<</Creator (wkhtmltopdf 0.12.6)>>\n',
       );
@@ -88,7 +81,10 @@ void main() {
 
     test('ملف ZIP/DOCX (PK\\x03\\x04) بيتكشف ثنائي وبيترفض', () {
       final bytes = Uint8List.fromList([
-        0x50, 0x4B, 0x03, 0x04,
+        0x50,
+        0x4B,
+        0x03,
+        0x04,
         ...List.generate(100, (i) => (i * 7 + 1) % 255 + 1),
       ]);
 

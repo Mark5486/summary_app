@@ -6,7 +6,6 @@ import '../../../../core/localization/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/entities/summary.dart';
 
-/// كارت النتيجة: أهم النقاط + شرح مبسط + إحصائيات الاختصار + نسخ.
 class SummaryResultCard extends StatelessWidget {
   final Summary summary;
 
@@ -37,7 +36,6 @@ class SummaryResultCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ─── أهم النقاط ───
             Row(
               children: [
                 Icon(
@@ -47,7 +45,10 @@ class SummaryResultCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(s.pointsTitle, style: AppTextStyles.title(context)),
+                  child: Text(
+                    s.pointsTitle,
+                    style: AppTextStyles.title(context),
+                  ),
                 ),
               ],
             ),
@@ -64,10 +65,9 @@ class SummaryResultCard extends StatelessWidget {
                       alignment: Alignment.center,
                       margin: const EdgeInsetsDirectional.only(end: 10, top: 2),
                       decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.12),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.12),
                         shape: BoxShape.circle,
                       ),
                       child: Text(
@@ -92,7 +92,6 @@ class SummaryResultCard extends StatelessWidget {
 
             const Divider(height: AppSizes.paddingLarge),
 
-            // ─── شرح مبسط ───
             Row(
               children: [
                 Icon(
@@ -113,10 +112,9 @@ class SummaryResultCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withValues(alpha: 0.06),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
               ),
               child: SelectableText(
@@ -127,7 +125,6 @@ class SummaryResultCard extends StatelessWidget {
 
             const SizedBox(height: AppSizes.paddingMedium),
 
-            // ─── إحصائيات + نسخ ───
             Row(
               children: [
                 Expanded(
@@ -141,7 +138,6 @@ class SummaryResultCard extends StatelessWidget {
                 IconButton(
                   tooltip: s.copySummary,
                   onPressed: () {
-                    // نسخ النص للمسافة اللصق — محلي بالكامل.
                     _copy(context, _plainText(s));
                   },
                   icon: const Icon(Icons.copy_outlined, size: 20),
@@ -158,17 +154,15 @@ class SummaryResultCard extends StatelessWidget {
     final s = AppStrings.of(context);
     await TextCopyHelper.copy(text);
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(s.copied)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(s.copied)));
     }
   }
 }
 
-/// فصل النسخ في helper صغير — سهل الاختبار.
 abstract final class TextCopyHelper {
   static Future<void> copy(String text) async {
-    // Clipboard من flutter/services.
     await Clipboard.setData(ClipboardData(text: text));
   }
 }

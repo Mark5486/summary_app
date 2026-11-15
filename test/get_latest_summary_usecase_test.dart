@@ -10,17 +10,17 @@ import 'package:mocktail/mocktail.dart';
 class _MockHistoryRepository extends Mock implements HistoryRepository {}
 
 SummaryModel _makeModel() => SummaryModel.fromSummary(
-      'sid-9',
-      DateTime(2026, 11, 2),
-      'نص أصلي طويل نسبيًا للتلخيص التجريبي هنا.',
-      const SummaryResult(
-        points: ['نقطة أولى', 'نقطة تانية'],
-        explanation: 'شرح مبسط',
-        keywords: ['كلمة'],
-        originalWordCount: 40,
-        summaryWordCount: 7,
-      ),
-    );
+  'sid-9',
+  DateTime(2026, 11, 2),
+  'نص أصلي طويل نسبيًا للتلخيص التجريبي هنا.',
+  const SummaryResult(
+    points: ['نقطة أولى', 'نقطة تانية'],
+    explanation: 'شرح مبسط',
+    keywords: ['كلمة'],
+    originalWordCount: 40,
+    summaryWordCount: 7,
+  ),
+);
 
 void main() {
   late _MockHistoryRepository repository;
@@ -38,10 +38,7 @@ void main() {
     final result = await useCase();
 
     expect(result.isRight(), isTrue);
-    result.fold(
-      (_) => fail('المفروض نجاح'),
-      (m) => expect(m, same(model)),
-    );
+    result.fold((_) => fail('المفروض نجاح'), (m) => expect(m, same(model)));
     verify(() => repository.latest()).called(1);
   });
 

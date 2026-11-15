@@ -7,13 +7,11 @@ import '../../constants/storage_keys.dart';
 import '../../services/local_storage_service.dart';
 import 'theme_state.dart';
 
-/// بيدير الوضع الفاتح/الغامق وبيحفظه محليًا.
 class ThemeCubit extends Cubit<ThemeState> {
   final LocalStorageService storage;
 
   ThemeCubit(this.storage) : super(const ThemeState());
 
-  /// تحميل الثيم المحفوظ قبل أول إطار — يمنع وميض الثيم الغلط.
   Future<void> ensureLoaded() async {
     final saved = storage.getString(StorageKeys.themeMode);
     switch (saved) {
@@ -21,7 +19,6 @@ class ThemeCubit extends Cubit<ThemeState> {
         emit(state.copyWith(mode: ThemeMode.light));
       case 'dark':
         emit(state.copyWith(mode: ThemeMode.dark));
-      // null أو أي قيمة تانية → يتبع النظام (الحالة الافتراضية).
     }
   }
 
@@ -39,7 +36,6 @@ class ThemeCubit extends Cubit<ThemeState> {
     }
   }
 
-  Future<void> toggle() => setMode(
-        state.mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
-      );
+  Future<void> toggle() =>
+      setMode(state.mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
 }

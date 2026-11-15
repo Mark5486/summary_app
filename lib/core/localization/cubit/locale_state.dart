@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// حالة اللغة — 'ar' افتراضي و 'en' بديل.
 class LocaleState extends Equatable {
   final String languageCode;
 

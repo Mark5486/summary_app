@@ -9,11 +9,6 @@ import '../cubit/history_cubit.dart';
 import '../cubit/history_state.dart';
 import '../widgets/history_card.dart';
 
-/// شاشة السجل: بحث فوري + كروت قابلة للفتح + حذف فردي/كلي.
-///
-/// متكيّفة مع الشاشة (مهمة 7): على الموبايل عمود واحد، وعلى التابلت/
-/// الديسكتوب كارتين جنب بعض عشان نستغل المساحة — والقايمة لسه
-/// ListView.builder (lazy) عشان متهنّجش مع السجلات الطويلة.
 class HistoryView extends StatelessWidget {
   const HistoryView({super.key});
 
@@ -71,13 +66,11 @@ class HistoryView extends StatelessWidget {
                 ),
             ],
           ),
-          // توسيط المحتوى على الشاشات الكبيرة (مهمة 6) — بعرض أوسع
-          // من شاشة القراءة عشان كارتين يبقوا مريحين جنب بعض.
+
           body: ResponsiveCenter(
             maxWidth: 900,
             child: Column(
               children: [
-                // ─── البحث ───
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
                   child: TextField(
@@ -89,13 +82,12 @@ class HistoryView extends StatelessWidget {
                   ),
                 ),
 
-                // ─── القايمة ───
                 Expanded(
                   child: state.entries.isEmpty
                       ? _EmptyState(message: s.historyEmpty)
                       : entries.isEmpty
-                          ? _EmptyState(message: s.noSearchResults)
-                          : _EntriesList(entries: entries),
+                      ? _EmptyState(message: s.noSearchResults)
+                      : _EntriesList(entries: entries),
                 ),
               ],
             ),
@@ -106,8 +98,6 @@ class HistoryView extends StatelessWidget {
   }
 }
 
-/// قايمة الملخصات — عمود واحد على الموبايل وكارتين جنب بعض على الشاشات
-/// العريضة (مهمة 7). الـ builder لسه lazy: كل صف بيتبنى وقت احتاجه بس.
 class _EntriesList extends StatelessWidget {
   final List<SummaryModel> entries;
 
@@ -118,7 +108,6 @@ class _EntriesList extends StatelessWidget {
     final twoColumns = !context.isCompact;
 
     if (!twoColumns) {
-      // ─── موبايل: عمود واحد (الشكل الأصلي) ───
       return ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: entries.length,
@@ -132,9 +121,6 @@ class _EntriesList extends StatelessWidget {
       );
     }
 
-    // ─── تابلت / ديسكتوب: كارتين في الصف ───
-    // ملاحظة: بنستخدم صفوف بدل GridView عشان كارت السجل (ExpansionTile)
-    // يقدر يتمدد بحرية من غير نسبة عرض/ارتفاع ثابتة تكسر التوسيع.
     final rowCount = (entries.length + 1) ~/ 2;
     return ListView.builder(
       padding: const EdgeInsets.all(16),
@@ -163,7 +149,6 @@ class _EntriesList extends StatelessWidget {
                       context.read<HistoryCubit>().delete(second.id),
                 ),
               )
-            // كارت ناقص في آخر صف — مكان فاضي يحافظ على تساوي العمودين.
             else
               const Expanded(child: SizedBox.shrink()),
           ],
@@ -173,7 +158,6 @@ class _EntriesList extends StatelessWidget {
   }
 }
 
-/// حالة الفراغ — أيقونة + رسالة.
 class _EmptyState extends StatelessWidget {
   final String message;
 

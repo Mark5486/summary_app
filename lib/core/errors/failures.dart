@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// طبقة الأخطاء اللي بتوصل للـ UI — نفس نمط `Either<Failure, T>`.
 sealed class Failure extends Equatable {
   final String? detail;
   const Failure([this.detail]);

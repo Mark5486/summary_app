@@ -2,15 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:besbasa/features/history/data/models/summary_model.dart';
 
 SummaryModel _sample() => const SummaryModel(
-      id: 'abc-123',
-      createdAtMs: 1730000000000,
-      originalText: 'نص أصلي طويل عن النيل والدلتا والزراعة في مصر القديمة',
-      points: ['النيل أهم نهر في مصر', 'الدلتا أخصب أرض'],
-      explanation: 'الفكرة: النيل والدلتا',
-      keywords: ['النيل', 'الدلتا'],
-      originalWordCount: 100,
-      summaryWordCount: 12,
-    );
+  id: 'abc-123',
+  createdAtMs: 1730000000000,
+  originalText: 'نص أصلي طويل عن النيل والدلتا والزراعة في مصر القديمة',
+  points: ['النيل أهم نهر في مصر', 'الدلتا أخصب أرض'],
+  explanation: 'الفكرة: النيل والدلتا',
+  keywords: ['النيل', 'الدلتا'],
+  originalWordCount: 100,
+  summaryWordCount: 12,
+);
 
 void main() {
   group('SummaryModel', () {
@@ -30,10 +30,7 @@ void main() {
     });
 
     test('fromJson بيتعامل مع الحقول الناقصة من غير ما يقع', () {
-      final restored = SummaryModel.fromJson({
-        'id': 'x',
-        'createdAtMs': 42,
-      });
+      final restored = SummaryModel.fromJson({'id': 'x', 'createdAtMs': 42});
       expect(restored.originalText, '');
       expect(restored.points, isEmpty);
       expect(restored.keywords, isEmpty);

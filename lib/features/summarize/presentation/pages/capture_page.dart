@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/localization/app_strings.dart';
 
-/// شاشة التصوير — معاينة حية + زرار تصوير، وترجّع الصورة للشاشة اللي قبلها.
-/// الموارد بتتحرر في dispose دايمًا (خصوصية + بطارية).
 class CapturePage extends StatefulWidget {
   const CapturePage({super.key});
 
@@ -39,8 +37,7 @@ class _CapturePageState extends State<CapturePage> {
 
       final controller = CameraController(
         back,
-        // ⚡ دقة عالية جدًا — الـ OCR محتاج بكسلات كتير عشان يقرا صفحة كاملة
-        // كثيرة الكلام (720p كانت بتطلع كلمات معدودة من صفحة 1600 كلمة).
+
         ResolutionPreset.ultraHigh,
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.jpeg,
@@ -95,11 +92,8 @@ class _CapturePageState extends State<CapturePage> {
       ),
       body: Stack(
         children: [
-          // ─── المعاينة ───
           if (_ready && _controller != null)
-            Center(
-              child: CameraPreview(_controller!),
-            )
+            Center(child: CameraPreview(_controller!))
           else if (_error != null)
             Center(
               child: Padding(
@@ -127,7 +121,6 @@ class _CapturePageState extends State<CapturePage> {
           else
             const Center(child: CircularProgressIndicator()),
 
-          // ─── زرار التصوير ───
           if (_ready)
             Align(
               alignment: Alignment.bottomCenter,

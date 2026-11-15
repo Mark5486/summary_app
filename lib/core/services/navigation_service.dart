@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// خدمة النافيجيشن — نفس مدرسة مشروع الرحلات (GlobalKey + دوال مساعدة).
 abstract class NavigationService {
   GlobalKey<NavigatorState> get navigatorKey;
 
@@ -15,8 +14,10 @@ class NavigationServiceImpl implements NavigationService {
 
   @override
   Future<dynamic> pushNamed(String routeName, {Object? arguments}) {
-    return navigatorKey.currentState!
-        .pushNamed(routeName, arguments: arguments);
+    return navigatorKey.currentState!.pushNamed(
+      routeName,
+      arguments: arguments,
+    );
   }
 
   @override

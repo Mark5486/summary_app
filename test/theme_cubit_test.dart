@@ -28,12 +28,9 @@ void main() {
       'toggle بيبدّل للغامق ويحفظ',
       build: () => ThemeCubit(storage),
       act: (cubit) => cubit.toggle(),
-      expect: () => [
-        const ThemeState(mode: ThemeMode.dark),
-      ],
+      expect: () => [const ThemeState(mode: ThemeMode.dark)],
       verify: (_) {
-        verify(() => storage.setString('besbasa_theme_mode', 'dark'))
-            .called(1);
+        verify(() => storage.setString('besbasa_theme_mode', 'dark')).called(1);
       },
     );
 

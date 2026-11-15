@@ -4,11 +4,6 @@ import '../../../../core/errors/failures.dart';
 import '../../data/models/summary_model.dart';
 import '../repositories/history_repository.dart';
 
-/// حالات استخدام السجل — كلها أوفلاين على التخزين المحلي.
-///
-/// ملاحظة التصميم: عمليات التخزين المحلي ما بترمي استثناءات
-/// (الـ DataSource بيبطّئ الفشل بهدوء عشان التلخيص ما يتعطلش)،
-/// فالحالات دي بترجع Left(StorageFailure) في الحالات الاستثنائية بس.
 class SaveSummaryUseCase {
   final HistoryRepository repository;
 
@@ -38,8 +33,6 @@ class GetHistoryUseCase {
   }
 }
 
-/// آخر ملخص اتحفظ — بيغذّي قسم "آخر ملخص" على الهوم.
-/// بيرجّع Right(null) لو السجل فاضي (مش غلطة).
 class GetLatestSummaryUseCase {
   final HistoryRepository repository;
 

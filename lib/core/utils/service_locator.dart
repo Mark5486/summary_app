@@ -18,26 +18,20 @@ import '../services/ocr/text_recognition_factory.dart';
 import '../services/ocr/text_recognition_service.dart';
 import '../theme/cubit/theme_cubit.dart';
 
-/// حاوية التبعيات — نفس مدرسة مشروع الرحلات (get_it).
 final getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
-  // ─── البنية التحتية ───
   final preferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<LocalStorageService>(
     () => LocalStorageServiceImpl(preferences),
   );
-  getIt.registerLazySingleton<NavigationService>(
-    () => NavigationServiceImpl(),
-  );
+  getIt.registerLazySingleton<NavigationService>(() => NavigationServiceImpl());
 
-  // ─── الخدمات ───
   getIt.registerLazySingleton<FileTextService>(() => FileTextServiceImpl());
   getIt.registerLazySingleton<TextRecognitionService>(
     createTextRecognitionService,
   );
 
-  // ─── السجل ───
   getIt.registerLazySingleton<HistoryLocalDataSource>(
     () => HistoryLocalDataSourceImpl(getIt<LocalStorageService>()),
   );
@@ -60,7 +54,6 @@ Future<void> setupServiceLocator() async {
     () => ClearHistoryUseCase(getIt<HistoryRepository>()),
   );
 
-  // ─── التلخيص ───
   getIt.registerLazySingleton<SummarizeRepository>(
     () => SummarizeRepositoryImpl(
       fileTextService: getIt<FileTextService>(),
@@ -80,7 +73,6 @@ Future<void> setupServiceLocator() async {
     () => ExtractOcrFromScannedPdfUseCase(getIt<SummarizeRepository>()),
   );
 
-  // ─── الـ Cubits ───
   getIt.registerFactory<ThemeCubit>(
     () => ThemeCubit(getIt<LocalStorageService>()),
   );

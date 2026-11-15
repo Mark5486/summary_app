@@ -5,12 +5,6 @@ import '../../../../core/localization/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../cubit/summarize_state.dart';
 
-/// بطاقة بيانات الملف المحمّل — الريفيو: عرض "تم استخراج N كلمة من
-/// M صفحة" بدل ما نحشر النص كله في خانة الإدخال.
-///
-/// - PDF عادي: عدّاد كلمات/صفحات + ملاحظات حدود الاستخراج.
-/// - PDF ممسوح ضوئيًا: تنبيه + زرار تشغيل الـ OCR.
-/// - وضع المعاينة: ملاحظة إن اللي ظاهر أول 2000 حرف بس.
 class FileInfoCard extends StatelessWidget {
   final FileLoadInfo info;
   final VoidCallback? onRunOcr;
@@ -68,10 +62,6 @@ class FileInfoCard extends StatelessWidget {
       if (previewing) s.previewNote,
     ];
 
-    // الأيقونة بتتبع نوع المصدر الحقيقي — مش حالة الـ OCR:
-    // PDF → أيقونة PDF، صورة متصوّرة (OCR) → أيقونة كاميرا،
-    // ملف نصي → أيقونة مستند (ريفيو: كانت fromOcr بتخلي isPdf
-    // true فصورة الكاميرا بتظهر بأيقونة PDF).
     final IconData icon;
     if (info.isPdf) {
       icon = Icons.picture_as_pdf_outlined;
@@ -88,10 +78,7 @@ class FileInfoCard extends StatelessWidget {
       title: title,
       child: notes.isEmpty
           ? null
-          : Text(
-              notes.join(' • '),
-              style: AppTextStyles.hint(context),
-            ),
+          : Text(notes.join(' • '), style: AppTextStyles.hint(context)),
     );
   }
 

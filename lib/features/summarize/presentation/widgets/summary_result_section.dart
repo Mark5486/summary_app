@@ -8,11 +8,6 @@ import '../../domain/entities/summary.dart';
 import '../cubit/summarize_cubit.dart';
 import 'summary_result_card.dart';
 
-/// قسم النتيجة على الهوم: عنوان واضح + شارة الحفظ + الكارت نفسه.
-///
-/// - نتيجة تلخيص جديدة → العنوان "النتيجة" + شارة "محفوظ في السجل ✓".
-/// - آخر ملخص مترجّع من السجل → العنوان "آخر ملخص من السجل" + زرار
-///   مسح من الهوم (السجل نفسه مبيتلمس).
 class SummaryResultSection extends StatelessWidget {
   final Summary summary;
   final bool restoredFromHistory;
@@ -47,7 +42,7 @@ class SummaryResultSection extends StatelessWidget {
                 style: AppTextStyles.title(context),
               ),
             ),
-            // شارة الحفظ للنتيجة الجديدة — وزرار مسح للمرجّع من السجل.
+
             if (restoredFromHistory)
               IconButton(
                 tooltip: s.removeFromHome,
@@ -63,15 +58,13 @@ class SummaryResultSection extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: primary.withValues(alpha: 0.10),
-                  borderRadius:
-                      BorderRadius.circular(AppSizes.radiusMedium),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
                 ),
                 child: Text(
                   s.savedToHistory,
-                  style: AppTextStyles.hint(context).copyWith(
-                    color: primary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTextStyles.hint(
+                    context,
+                  ).copyWith(color: primary, fontWeight: FontWeight.w600),
                 ),
               ),
           ],

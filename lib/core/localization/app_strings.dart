@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// كل نصوص التطبيق عربي + إنجليزي.
-/// الاستخدام: AppStrings.of(context).summarize
-///
-/// الاختيار بيحصل من لغة الـ MaterialApp الحالية — اللي بتتحكم فيها
-/// LocaleCubit وبتتحفظ محليًا. العربي هو الافتراضي.
 class AppStrings {
   final Locale locale;
 
@@ -16,19 +11,17 @@ class AppStrings {
 
   bool get isArabic => locale.languageCode == 'ar';
 
-  // ───────────────────────── التطبيق ─────────────────────────
   String get appName => isArabic ? 'ببساطة' : 'Besbasa';
   String get appTagline =>
       isArabic ? 'أي منهج… ببساطة شديدة' : 'Any material… made simple';
 
-  // ───────────────────────── التبويبات ─────────────────────────
   String get tabSummarize => isArabic ? 'تلخيص' : 'Summarize';
   String get tabHistory => isArabic ? 'السجل' : 'History';
   String get tabSettings => isArabic ? 'الإعدادات' : 'Settings';
 
-  // ───────────────────────── شاشة التلخيص ─────────────────────────
-  String get inputHint =>
-      isArabic ? 'الصق النص هنا… أو افتح ملف أو صوّر صفحة' : 'Paste text here… or open a file or capture a page';
+  String get inputHint => isArabic
+      ? 'الصق النص هنا… أو افتح ملف أو صوّر صفحة'
+      : 'Paste text here… or open a file or capture a page';
   String get summarizeButton => isArabic ? 'لخّصه ببساطة' : 'Summarize simply';
   String get clearButton => isArabic ? 'مسح' : 'Clear';
   String get openFile => isArabic ? 'ملف' : 'File';
@@ -44,14 +37,12 @@ class AppStrings {
   String get compressionLabel => isArabic ? 'الاختصار' : 'Compression';
   String get originalLabel => isArabic ? 'الأصل' : 'Original';
 
-  // ───────────────────────── النتيجة على الهوم ─────────────────────────
   String get resultTitle => isArabic ? 'النتيجة' : 'Result';
   String get savedToHistory =>
       isArabic ? 'محفوظ في السجل ✓' : 'Saved to history ✓';
   String get lastSummaryTitle =>
       isArabic ? 'آخر ملخص من السجل' : 'Last summary from history';
-  String get removeFromHome =>
-      isArabic ? 'مسح من الهوم' : 'Clear from home';
+  String get removeFromHome => isArabic ? 'مسح من الهوم' : 'Clear from home';
 
   String get inputTooShort => isArabic
       ? 'النص قصير أوي — محتاج 30 كلمة على الأقل عشان ألخصه بمعنى.'
@@ -69,7 +60,6 @@ class AppStrings {
       ? 'مقدرتش أفتح ملف الـ PDF — الملف ممكن يكون بايظ أو محمي بكلمة سر.'
       : 'Could not open the PDF — it may be corrupted or password-protected.';
 
-  // ───────────────────────── بطاقة معلومات الملف ─────────────────────────
   String pdfExtracted(int words, int pages) {
     if (isArabic) {
       if (pages == 1) return 'تم استخراج $words كلمة من صفحة واحدة';
@@ -100,7 +90,8 @@ class AppStrings {
       ? 'الملف ده PDF ممسوح ضوئيًا (صفحات صور) — مفيش نص جواه يتستخرج مباشرة.'
       : 'This PDF is scanned (image pages) — there is no text to extract directly.';
 
-  String get runOcr => isArabic ? 'تشغيل OCR على صفحات الملف' : 'Run OCR on the pages';
+  String get runOcr =>
+      isArabic ? 'تشغيل OCR على صفحات الملف' : 'Run OCR on the pages';
 
   String get previewNote => isArabic
       ? 'معاينة أول 2000 حرف بس — التلخيص هيتم على النص الكامل.'
@@ -129,7 +120,6 @@ class AppStrings {
       ? 'اكتب أو الصق نص الأول 🙂'
       : 'Type or paste some text first 🙂';
 
-  // ───────────────────────── شاشة الكاميرا ─────────────────────────
   String get captureTitle => isArabic ? 'صوّر الصفحة' : 'Capture page';
   String get captureButton => isArabic ? 'تصوير' : 'Capture';
   String get cameraPermissionDenied => isArabic
@@ -140,7 +130,6 @@ class AppStrings {
       ? 'مفيش كاميرا متاحة على الجهاز — الصق النص أو افتح ملف بدل التصوير.'
       : 'No camera available on this device — paste text or open a file instead.';
 
-  // ───────────────────────── السجل ─────────────────────────
   String get historyTitle => isArabic ? 'سجل الملخصات' : 'Summary history';
   String get searchHint => isArabic ? 'ابحث في السجل…' : 'Search history…';
   String get historyEmpty => isArabic
@@ -151,13 +140,11 @@ class AppStrings {
   String get delete => isArabic ? 'حذف' : 'Delete';
   String get deleted => isArabic ? 'اتحذف ✓' : 'Deleted ✓';
   String get clearAll => isArabic ? 'مسح الكل' : 'Clear all';
-  String get clearAllConfirm => isArabic
-      ? 'تمسح كل الملخصات المحفوظة؟'
-      : 'Delete all saved summaries?';
+  String get clearAllConfirm =>
+      isArabic ? 'تمسح كل الملخصات المحفوظة؟' : 'Delete all saved summaries?';
   String get cancel => isArabic ? 'إلغاء' : 'Cancel';
   String get confirm => isArabic ? 'أيوه امسح' : 'Yes, delete';
 
-  // ───────────────────────── الإعدادات ─────────────────────────
   String get settingsTitle => isArabic ? 'الإعدادات' : 'Settings';
   String get darkMode => isArabic ? 'الوضع الغامق' : 'Dark mode';
   String get language => isArabic ? 'اللغة' : 'Language';

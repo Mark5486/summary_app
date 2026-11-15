@@ -39,7 +39,7 @@ void main() {
     test('كلمات التوقف العربية المطبعّة بتتصاد', () {
       expect(Stopwords.isStopword('في'), isTrue);
       expect(Stopwords.isStopword('التي'), isTrue);
-      // "على" بعد التطبيع بتبقى "علي"
+
       expect(Stopwords.isStopword('علي'), isTrue);
     });
 
@@ -65,7 +65,8 @@ void main() {
     });
 
     test('بيقسم على السطور الجديدة كذلك', () {
-      final text = 'سطر أول طويل بما يكفي ليتم احتسابه جملة كاملة صحيحة\n'
+      final text =
+          'سطر أول طويل بما يكفي ليتم احتسابه جملة كاملة صحيحة\n'
           'وسطر تاني طويل برضه بما يكفي عشان يتحسب جملة تانية صحيحة';
       final sentences = SentenceSplitter.split(text);
       expect(sentences.length, 2);
@@ -77,7 +78,8 @@ void main() {
     });
 
     test('بيحافظ على ترتيب الجمل بالمؤشر', () {
-      final text = 'الجملة الأولى هنا طويلة كفاية عشان تتحسب جملة صحيحة. '
+      final text =
+          'الجملة الأولى هنا طويلة كفاية عشان تتحسب جملة صحيحة. '
           'والجملة التانية كذلك طويلة كفاية عشان تتحسب كمان جملة صحيحة.';
       final sentences = SentenceSplitter.split(text);
       expect(sentences[0].index, 0);
@@ -86,19 +88,21 @@ void main() {
 
     test('الجملة بتحتفظ بنصها الأصلي (تشكيل) للعرض — مش نسخة مطبّعة', () {
       final sentences = SentenceSplitter.split(
-          'إِنَّ الْعِلْمَ نُورٌ يُضِيءُ دَرْبَ الْمُتَعَلِّمِ فِي كُلِّ الأَحْوَالِ.');
+        'إِنَّ الْعِلْمَ نُورٌ يُضِيءُ دَرْبَ الْمُتَعَلِّمِ فِي كُلِّ الأَحْوَالِ.',
+      );
       expect(sentences, isNotEmpty);
-      // العرض: النص الأصلي زي ما هو.
+
       expect(sentences.first.text.contains('إِنَّ'), isTrue);
       expect(sentences.first.text.contains('إ ن'), isFalse);
-      // العدّ: "إِنَّ" كلمة واحدة متطبّعة، مش حروف مفكّكة.
+
       expect(sentences.first.normalizedWords.first, 'ان');
     });
 
     test("النص الإنجليزي ببيّن علاماته في العرض (Don't و 3.5%)", () {
       final sentences = SentenceSplitter.split(
-          "Don't stop believing in yourself, ever. Growth reached 3.5% this "
-          'year, which beat every forecast published by the team last spring.');
+        "Don't stop believing in yourself, ever. Growth reached 3.5% this "
+        'year, which beat every forecast published by the team last spring.',
+      );
       expect(sentences.length, 2);
       expect(sentences[0].text.contains("Don't"), isTrue);
       expect(sentences[0].text.contains('Don t'), isFalse);
@@ -108,7 +112,8 @@ void main() {
   });
 
   group('ExtractiveSummarizer — عربي', () {
-    const arabicText = 'نهر النيل هو أطول نهر في العالم ويمر عبر إحدى عشرة '
+    const arabicText =
+        'نهر النيل هو أطول نهر في العالم ويمر عبر إحدى عشرة '
         'دولة أفريقية قبل أن يصل إلى البحر المتوسط. يعتمد مصر والسودان على '
         'مياه النيل في الزراعة والشرب بشكل شبه كامل. توجد اتفاقيات تاريخية '
         'تنظم تقاسم مياه النيل بين دول الحوض. السد العالي في أسوان يحمي مصر '
@@ -131,7 +136,7 @@ void main() {
       final result = ExtractiveSummarizer.summarize(arabicText);
       expect(result.explanation, isNotEmpty);
       expect(result.keywords, isNotEmpty);
-      // "النيل" أتكررت كتير — لازم تكون ضمن الكلمات المفتاحية.
+
       expect(result.keywords.contains('النيل'), isTrue);
     });
 
@@ -158,7 +163,8 @@ void main() {
   });
 
   group('ExtractiveSummarizer — إنجليزي', () {
-    const englishText = 'Photosynthesis is the process plants use to convert '
+    const englishText =
+        'Photosynthesis is the process plants use to convert '
         'light energy into chemical energy stored in glucose molecules. The '
         'process happens inside chloroplasts which contain the green pigment '
         'chlorophyll that absorbs sunlight. Water and carbon dioxide are the '
@@ -187,16 +193,16 @@ void main() {
   });
 
   group('ExtractiveSummarizer — النص الأصلي للعرض', () {
-    // النصوص دي متشكّلة وعليها ترقيم — لو أي تطبيع حصل قبل العرض
-    // هتفشل tests لأن النقاط مش هتلاقي نفسها حرفيًا في الأصل.
-    const diacriticText = 'إِنَّ الْعِلْمَ نُورٌ يُزِيلُ ظُلُمَاتِ الْجَهْلِ، '
+    const diacriticText =
+        'إِنَّ الْعِلْمَ نُورٌ يُزِيلُ ظُلُمَاتِ الْجَهْلِ، '
         'وَالْعِلْمُ سِلَاحٌ قَوِيٌّ يَحْمِي صَاحِبَهُ فِي كُلِّ زَمَانٍ. '
         'طَلَبُ الْعِلْمِ عِبَادَةٌ تُقَرِّبُ الْإِنْسَانَ مِنْ رَبِّهِ، '
         'وَالْمُعَلِّمُ الْأَمِينُ يَبْنِي أَجْيَالًا تَقْرَأُ وَتَفْكِرُ. '
         'الْكِتَابُ الْجَيِّدُ صَدِيقٌ أَمِينٌ لَا يَمْنَعُ عِلْمَهُ عَمَّنْ '
         'سَأَلَهُ يَوْمًا مَا.';
 
-    const englishSignedText = "Don't underestimate the power of small daily "
+    const englishSignedText =
+        "Don't underestimate the power of small daily "
         'habits, because they compound into remarkable results over time. '
         'Growth reached 3.5% this year, which beat every forecast that the '
         'analysts published last spring. Reading one chapter each night '
@@ -209,10 +215,13 @@ void main() {
       final result = ExtractiveSummarizer.summarize(diacriticText);
       expect(result.points, isNotEmpty);
       for (final p in result.points) {
-        expect(diacriticText.contains(p), isTrue,
-            reason: 'النقطة اتعملها تطبيع قبل العرض: $p');
+        expect(
+          diacriticText.contains(p),
+          isTrue,
+          reason: 'النقطة اتعملها تطبيع قبل العرض: $p',
+        );
       }
-      // مثال الريفيو: "إِنَّ الْعِلْمَ" ما تتفككش لـ "إ ن ال ع ل م".
+
       expect(result.points.join(' ').contains('إ ن'), isFalse);
     });
 
@@ -220,8 +229,11 @@ void main() {
       final result = ExtractiveSummarizer.summarize(englishSignedText);
       expect(result.points, isNotEmpty);
       for (final p in result.points) {
-        expect(englishSignedText.contains(p), isTrue,
-            reason: 'point was normalized before display: $p');
+        expect(
+          englishSignedText.contains(p),
+          isTrue,
+          reason: 'point was normalized before display: $p',
+        );
       }
       expect(result.points.join(' ').contains("Don't"), isTrue);
       expect(result.points.join(' ').contains('3.5%'), isTrue);

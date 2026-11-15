@@ -14,7 +14,6 @@ import '../cubit/summarize_state.dart';
 import '../widgets/file_info_card.dart';
 import '../widgets/summary_result_section.dart';
 
-/// شاشة التلخيص الرئيسية: إدخال ← مصادر ← نقاط + شرح.
 class SummarizeView extends StatefulWidget {
   const SummarizeView({super.key});
 
@@ -25,14 +24,10 @@ class SummarizeView extends StatefulWidget {
 class _SummarizeViewState extends State<SummarizeView> {
   final _inputController = TextEditingController();
 
-  /// النزول التلقائي للنتيجة بعد التلخيص — مفتاح قسم النتيجة.
   final _resultKey = GlobalKey();
 
-  /// تتبّع انتقال الحالة لنجاح — عشان النزول يحصل مرة واحدة بس.
   SummarizeStatus? _lastStatus;
 
-  /// ⚡ كاش عدّاد الكلمات — العدّ بيحصل مرة واحدة لكل نص جديد
-  /// مش مع كل rebuild (الريفيو: العدّ كان بيتكرر مع كل ضغطة).
   String? _countedInput;
   int _cachedWordCount = 0;
 
@@ -43,9 +38,9 @@ class _SummarizeViewState extends State<SummarizeView> {
   }
 
   Future<void> _openCamera() async {
-    final captured = await Navigator.of(context).push<XFile>(
-      MaterialPageRoute(builder: (_) => const CapturePage()),
-    );
+    final captured = await Navigator.of(
+      context,
+    ).push<XFile>(MaterialPageRoute(builder: (_) => const CapturePage()));
 
     if (captured != null && mounted) {
       context.read<SummarizeCubit>().recognizeImage(captured);
@@ -55,9 +50,9 @@ class _SummarizeViewState extends State<SummarizeView> {
   void _summarize() {
     if (_inputController.text.trim().isEmpty) {
       final s = AppStrings.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(s.emptyInput)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(s.emptyInput)));
       return;
     }
 
@@ -71,8 +66,6 @@ class _SummarizeViewState extends State<SummarizeView> {
 
     return BlocConsumer<SummarizeCubit, SummarizeState>(
       listener: (context, state) {
-        // النزول للنتيجة بيحصل مرة واحدة بس — لحظة تحوّل الحالة لنجاح
-        // (الريفيو: النتيجة كانت بتترندر تحت الطية والمستخدم مش شايفها).
         if (state.status == SummarizeStatus.success &&
             _lastStatus != SummarizeStatus.success) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -90,13 +83,11 @@ class _SummarizeViewState extends State<SummarizeView> {
 
         final preview = state.previewText;
         if (preview != null) {
-          // وضع المعاينة: خانة الإدخال بتعرض أول 2000 حرف بس (ريدي-أونلي)
-          // والنص الكامل بيفضل في الـ cubit — الريفيو: ماتحشرش النص
-          // الناتج كله في الـ TextField عشان الواجهة متهنّجش.
           if (_inputController.text != preview) {
             _inputController.text = preview;
-            _inputController.selection =
-                const TextSelection.collapsed(offset: 0);
+            _inputController.selection = const TextSelection.collapsed(
+              offset: 0,
+            );
           }
         } else if (state.inputText != _inputController.text) {
           _inputController.text = state.inputText;
@@ -114,7 +105,6 @@ class _SummarizeViewState extends State<SummarizeView> {
             );
         }
 
-        // إشعار عابر (قص النص / حد الصفحات) — بيتعرض مرة وبينضف.
         final notice = state.notice;
         if (notice != null) {
           ScaffoldMessenger.of(context)
@@ -130,8 +120,6 @@ class _SummarizeViewState extends State<SummarizeView> {
         }
       },
       builder: (context, state) {
-        // ⚡ عدّاد الكلمات بيتحسب مرة واحدة للنص المكتوب/الملصوق —
-        // ولو الملف جاي من تحميل/OCR العدّاد محسوب خلاص في الـ cubit.
         if (state.fileInfo == null && _countedInput != state.inputText) {
           _countedInput = state.inputText;
           _cachedWordCount = _countWords(state.inputText);
@@ -159,8 +147,6 @@ class _SummarizeViewState extends State<SummarizeView> {
             ),
           ),
           body: SafeArea(
-            // عمود من قسمين: المحتوى بيسكرول لوحده + شريط الزرار مثبّت
-            // تحت خالص (مهمة 1: الزرار كان بيختفي تحت لما الملف كبير).
             child: Column(
               children: [
                 Expanded(
@@ -187,11 +173,6 @@ class _SummarizeViewState extends State<SummarizeView> {
     );
   }
 
-  /// المحتوى الرئيسي فوق شريط الزرار.
-  ///
-  /// - شاشة عريضة (≥ 1200px) وفيه نتيجة: **عمودين** — الإدخال جنب
-  ///   النتيجة، كل واحدة بسكرولها (مهمة 8) — استغلال كامل للمساحة.
-  /// - غير كده: عمود واحد موسّط (الإدخال وبعده النتيجة).
   Widget _buildScrollContent(
     BuildContext context,
     AppStrings s,
@@ -199,14 +180,12 @@ class _SummarizeViewState extends State<SummarizeView> {
     int wordCount, {
     required bool busy,
   }) {
-    // ─── عمودين: الإدخال جنب النتيجة (مهمة 8) ───
     if (context.isTwoPane && state.summary != null) {
       return Padding(
         padding: const EdgeInsets.all(AppSizes.paddingMedium),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ─── عمود الإدخال ───
             Expanded(
               flex: 5,
               child: ListView(
@@ -218,7 +197,6 @@ class _SummarizeViewState extends State<SummarizeView> {
             ),
             const SizedBox(width: AppSizes.paddingMedium),
 
-            // ─── عمود النتيجة ───
             Expanded(
               flex: 4,
               child: ListView(
@@ -231,11 +209,9 @@ class _SummarizeViewState extends State<SummarizeView> {
       );
     }
 
-    // ─── عمود واحد (الموبايل/التابلت — أو لسه مفيش نتيجة) ───
     return ListView(
       padding: const EdgeInsets.all(AppSizes.paddingMedium),
       children: [
-        // توسيط المحتوى على الشاشات الكبيرة — سطور قراءة مريحة (مهمة 6).
         ResponsiveCenter(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -243,7 +219,6 @@ class _SummarizeViewState extends State<SummarizeView> {
             children: [
               _buildInputCard(context, s, state, wordCount, busy: busy),
 
-              // ─── النتيجة (عنوان قسم + كارت) — بيتنزل لها تلقائيًا ───
               if (state.summary != null) ...[
                 const SizedBox(height: AppSizes.paddingLarge),
                 _buildResultSection(state),
@@ -255,7 +230,6 @@ class _SummarizeViewState extends State<SummarizeView> {
     );
   }
 
-  /// بطاقة الإدخال: النص/المعاينة + مصادر + مسح + عدّاد الكلمات.
   Widget _buildInputCard(
     BuildContext context,
     AppStrings s,
@@ -269,10 +243,6 @@ class _SummarizeViewState extends State<SummarizeView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // وضع المعاينة: نص للمشاهدة والنسخ في الصفحة نفسها —
-            // مش خانة إدخال بتلقط الإيماءة جوّاها، عشان السكرول
-            // يفضل شغال في الصفحة كلها (مهمة 2: كان المستخدم
-            // ميقدرش ينزل لتحت لما الملف كبير).
             if (state.previewText != null)
               SelectableText(
                 state.previewText!,
@@ -284,20 +254,19 @@ class _SummarizeViewState extends State<SummarizeView> {
                 onChanged: context.read<SummarizeCubit>().setInput,
                 minLines: 6,
                 maxLines: 12,
-                // نفس سقف الـ cubit — اللصق الضخم بيتقص هنا كمان.
+
                 maxLength: SummarizeCubit.maxInputChars,
-                textDirection: null, // الاتجاه بيتبع اللغة تلقائيًا
+                textDirection: null,
                 decoration: InputDecoration(
                   hintText: s.inputHint,
                   border: InputBorder.none,
-                  // إخفاء عدّاد الحروف — فيه عدّاد كلمات تحت.
+
                   counterText: '',
                 ),
                 style: AppTextStyles.body(context),
               ),
             const SizedBox(height: AppSizes.paddingSmall),
 
-            // ─── مصادر الإدخال ───
             Wrap(
               spacing: AppSizes.paddingSmall,
               runSpacing: AppSizes.paddingSmall,
@@ -318,7 +287,6 @@ class _SummarizeViewState extends State<SummarizeView> {
               ],
             ),
 
-            // ─── بطاقة معلومات الملف (PDF/نصي/ممسوح) ───
             if (state.fileInfo != null) ...[
               const SizedBox(height: AppSizes.paddingSmall),
               FileInfoCard(
@@ -334,12 +302,11 @@ class _SummarizeViewState extends State<SummarizeView> {
             const SizedBox(height: AppSizes.paddingSmall),
             Row(
               children: [
-                // زرار المسح — بيرجّع كل حاجة فاضية عشان تكتب نص
-                // جديد (وخاصة في وضع المعاينة اللي مفيش كتابة فيه).
                 if (state.inputText.isNotEmpty)
                   TextButton.icon(
-                    onPressed:
-                        busy ? null : context.read<SummarizeCubit>().clearInput,
+                    onPressed: busy
+                        ? null
+                        : context.read<SummarizeCubit>().clearInput,
                     icon: const Icon(Icons.clear_all, size: 18),
                     label: Text(s.clearButton),
                   ),
@@ -356,7 +323,6 @@ class _SummarizeViewState extends State<SummarizeView> {
     );
   }
 
-  /// قسم النتيجة بمفتاح النزول التلقائي — نفس الويدجت في الوضعين.
   KeyedSubtree _buildResultSection(SummarizeState state) {
     return KeyedSubtree(
       key: _resultKey,
@@ -367,7 +333,6 @@ class _SummarizeViewState extends State<SummarizeView> {
     );
   }
 
-  /// الويندوز: التصوير مدعوم على الموبايل والويب بس.
   static final bool _cameraHiddenOnThisPlatform = isWindows;
 
   static int _countWords(String text) {
@@ -379,12 +344,6 @@ class _SummarizeViewState extends State<SummarizeView> {
   }
 }
 
-/// شريط زرار التلخيص الثابت — مهمة 1: الزرار كان بيختفي تحت لما
-/// المستخدم يحط ملف كبير وميلاقاش سكرول يوصله. دلوقتي الزرار دايمًا
-/// ظاهر في قاع الشاشة فوق شريط التبويبات مهما كان المحتوى طويل.
-///
-/// - أثناء الاستخراج (OCR/قراءة ملف): شريط تقدّم رفيع فوق الزرار.
-/// - أثناء التلخيص: سبينر جوه الزرار + الزرار متقفل.
 class _SummarizeBar extends StatelessWidget {
   final bool busy;
   final bool loading;

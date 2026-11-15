@@ -14,10 +14,6 @@ import '../../../../core/summarizer/extractive_summarizer.dart';
 import '../../domain/entities/summary.dart';
 import '../../domain/repositories/summarize_repository.dart';
 
-/// التنفيذ الحقيقي — بيجمع محرك التلخيص + الخدمات المحلية كلها أوفلاين.
-///
-/// الكاميرا نفسها بتتدير من شاشة التصوير (UI) — المستودع بياخد الصورة
-/// الجاهزة ويقراها بالـ OCR.
 class SummarizeRepositoryImpl implements SummarizeRepository {
   final FileTextService fileTextService;
   final TextRecognitionService recognitionService;
@@ -30,9 +26,6 @@ class SummarizeRepositoryImpl implements SummarizeRepository {
   @override
   Future<Either<Failure, Summary>> summarize(String text) async {
     try {
-      // ⚡ تحسين أداء — المحرك بيتنفّذ في isolate منفصل عشان الشاشة
-      // متتجمدش مع النصوص الطويلة. نفس الدالة ونفس النتيجة بالظبط،
-      // وعلى الويب compute بينفّذها بنفس الطريقة زي قبل.
       final result = await compute(ExtractiveSummarizer.summarize, text);
 
       return Right(
@@ -88,7 +81,6 @@ class SummarizeRepositoryImpl implements SummarizeRepository {
     required void Function(double progress) onProgress,
   }) async {
     try {
-      // مرحلة الرسم = أول 30% من التقدّم.
       final pages = await PdfTextService.renderPagesToPng(
         pdfBytes,
         onProgress: (done, total) =>
@@ -98,7 +90,6 @@ class SummarizeRepositoryImpl implements SummarizeRepository {
         return const Left(NoTextFoundFailure());
       }
 
-      // مرحلة التعرف على كل صفحة = الـ 70% الباقيين.
       final buffer = StringBuffer();
       for (var i = 0; i < pages.length; i++) {
         final image = await prepareOcrImage(pages[i], 'page-${i + 1}.png');
@@ -108,14 +99,12 @@ class SummarizeRepositoryImpl implements SummarizeRepository {
             ..write(text)
             ..writeln();
         } on NoTextFoundException {
-          // صفحة من غير نص واضح — نتخطاها ونكمل الباقي.
         } finally {
           await disposeOcrImage(image);
         }
         onProgress(0.3 + 0.7 * ((i + 1) / pages.length));
       }
 
-      // نفس مسار التنظيف بتاع الاستخراج المباشر — توحيد النتيجة.
       final combined = PdfTextCleaner.clean(buffer.toString());
       if (combined.isEmpty) {
         return const Left(NoTextFoundFailure());

@@ -7,9 +7,6 @@ import 'package:besbasa/core/services/file_type_detector.dart';
 void main() {
   group('FileTypeDetector — باج BMP RangeError', () {
     test('ملف نصي بيبدأ بـ "BM" بطول 15–17 بايت مبيعملش RangeError', () {
-      // حالة الريفيو بالحرف: نص عادي بيبدأ بحرفين B و M وطوله
-      // 15 أو 16 أو 17 بايت — الكود القديم كان بيقرأ b[15..17]
-      // بره حدود الملف ويعمل RangeError كراش.
       for (final len in [15, 16, 17]) {
         final bytes = utf8.encode('BM${'x' * (len - 2)}');
         expect(bytes.length, len);
@@ -22,11 +19,25 @@ void main() {
     });
 
     test('ملف BMP حقيقي (DIB header صحيح) بيتكتشف ثنائي', () {
-      // 14 بايت file header + بداية DIB header بقيمة 40
       final bmp = <int>[
-        0x42, 0x4D, // "BM"
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // باقي الـ file header
-        0x28, 0x00, 0x00, 0x00, // dibSize = 40 (little-endian)
+        0x42,
+        0x4D,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0x28,
+        0x00,
+        0x00,
+        0x00,
       ];
       expect(
         FileTypeDetector.detect(Uint8List.fromList(bmp)),

@@ -3,7 +3,6 @@ import '../../../../core/summarizer/extractive_summarizer.dart';
 export '../../../../core/summarizer/extractive_summarizer.dart'
     show SummaryResult;
 
-/// كيان الملخص — نقاط قليلة + شرح مبسط + النص الأصلي للعرض والبحث.
 class Summary {
   final String id;
   final DateTime createdAt;

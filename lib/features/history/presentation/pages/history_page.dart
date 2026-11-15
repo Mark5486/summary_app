@@ -5,7 +5,6 @@ import '../../../../core/utils/service_locator.dart';
 import '../cubit/history_cubit.dart';
 import '../view/history_view.dart';
 
-/// صفحة السجل المستقلة (للراوتر) — بتملك الـ Cubit بتاعها.
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 

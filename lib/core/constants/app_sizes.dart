@@ -1,4 +1,3 @@
-/// مقاسات موحدة للثيم — نفس مدرسة مشروع الرحلات.
 abstract final class AppSizes {
   static const double paddingSmall = 8;
   static const double paddingMedium = 16;

@@ -1,7 +1,6 @@
 import '../localization/app_strings.dart';
 import '../errors/failures.dart';
 
-/// ترجمة الفشل لرسالة مفهومة للمستخدم — مكان واحد لكل الشاشات.
 String failureToMessage(Failure failure, AppStrings s) {
   switch (failure) {
     case InputTooShortFailure():

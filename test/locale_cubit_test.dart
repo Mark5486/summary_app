@@ -12,8 +12,7 @@ void main() {
 
   setUp(() {
     storage = _MockStorage();
-    when(() => storage.setString(any(), any()))
-        .thenAnswer((_) async {});
+    when(() => storage.setString(any(), any())).thenAnswer((_) async {});
     when(() => storage.getString(any())).thenReturn(null);
     when(() => storage.remove(any())).thenAnswer((_) async {});
   });
@@ -29,9 +28,7 @@ void main() {
       'setLanguage بيبدّل للإنجليزي ويحفظ',
       build: () => LocaleCubit(storage),
       act: (cubit) => cubit.setLanguage('en'),
-      expect: () => [
-        const LocaleState(languageCode: 'en'),
-      ],
+      expect: () => [const LocaleState(languageCode: 'en')],
       verify: (_) {
         verify(() => storage.setString('besbasa_locale', 'en')).called(1);
       },

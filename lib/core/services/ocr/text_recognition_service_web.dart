@@ -1,9 +1,3 @@
-// Engine: Tesseract.js — Web only, selected via conditional import.
-//
-// الخصوصية: الويب بيحمّل محرك Tesseract.js وملفات اللغة من CDN في أول
-// استخدام بس، وبعدها بيستخدم الكاش — التلخيص نفسه أوفلاين دايمًا.
-// مفيش أي print/log هنا — النص المستخرج بيانات شخصية.
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js_interop';
@@ -16,12 +10,14 @@ import 'text_recognition_service.dart';
 
 @JS('Tesseract.recognize')
 external JSPromise<JSAny> _tesseractRecognize(
-    JSAny image, JSString languages, JSAny? options);
+  JSAny image,
+  JSString languages,
+  JSAny? options,
+);
 
 class TextRecognitionServiceImpl implements TextRecognitionService {
   static const String _languages = 'ara+eng';
 
-  /// لو الـ CDN بطّأ أو الـ promise علق، الشاشة ما تقفش على لودينج للأبد.
   static const Duration _recognitionTimeout = Duration(seconds: 60);
 
   @override
@@ -31,9 +27,6 @@ class TextRecognitionServiceImpl implements TextRecognitionService {
 
       final dataUrl = 'data:${_mimeType(bytes)};base64,${base64Encode(bytes)}';
 
-      // ⚡ PSM 6: الصورة كلها كتلة نص واحدة — أدق بكتير للصفحات
-      // المكتظة من إن تقسيم الصفحات التلقائي يقصّف معظم الكلام
-      // (صفحة 1600 كلمة كانت بتطلع منها كلمات معدودة).
       final options = <String, dynamic>{
         'params': <String, String>{
           'tessedit_pageseg_mode': '6',
@@ -64,7 +57,6 @@ class TextRecognitionServiceImpl implements TextRecognitionService {
     }
   }
 
-  // الكاميرات بتختلف بين المتصفحات: بعضها PNG وأغلبها JPEG.
   String _mimeType(List<int> bytes) {
     final isPng = bytes.length > 4 && bytes[0] == 0x89 && bytes[1] == 0x50;
 

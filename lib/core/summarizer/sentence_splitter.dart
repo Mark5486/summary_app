@@ -1,8 +1,11 @@
 import 'arabic_normalizer.dart';
 
-/// جملة واحدة بعد التقطيع — مع موقعها الأصلي عشان نحافظ على الترتيب.
+/// جملة واحدة بعد التقطيع.
 class Sentence {
   final int index;
+
+  /// النص **الأصلي** للجملة — زي ما المستخدم كاتبه بالظبط
+  /// (تشكيل وترقيم) — ده اللي بيتعرض للمستخدم في النقاط.
   final String text;
 
   /// فاصل الكلمات — متعرّف مرة واحدة بدل ما بيتجمّع مع كل جملة.
@@ -12,15 +15,14 @@ class Sentence {
   /// ده ثمن بسيط مقابل توفير نص شغل التطبيع مع كل نداء.
   Sentence(this.index, this.text);
 
-  /// الكلمات المتطبّعة — بتتحسب **مرة واحدة فقط** عند أول نداء
-  /// (المحرك بينادي عليها أكتر من مرة: عدّ التكرار + حساب الأوزان —
-  /// التخزين المؤقت ده بيوفّر نص الشغل بدون أي تغيير في النتيجة).
+  /// الكلمات المتطبّعة — للعدّ والأوزان **بس**، مش للعرض.
+  /// بتتحسب مرة واحدة عند أول نداء (المحرك بينادي عليها أكتر من مرة).
   late final List<String> normalizedWords = _computeNormalizedWords();
 
   List<String> _computeNormalizedWords() {
-    final raw = text.split(_wordSeparator);
+    final normalized = ArabicNormalizer.normalizeText(text);
     final words = <String>[];
-    for (final w in raw) {
+    for (final w in normalized.split(_wordSeparator)) {
       final n = ArabicNormalizer.normalizeWord(w);
       if (n.isNotEmpty) words.add(n);
     }
@@ -30,8 +32,8 @@ class Sentence {
 
 /// تقطيع النص لجمل — بيفهم ترقيم عربي وإنجليزي وبيقسم على السطور الجديدة.
 ///
-/// ⚠️ الترتيب مهم: بنقسم على النص الخام **قبل** التطبيع —
-/// لأن التطبيع بيستبدل علامات الترقيم بمسافات.
+/// ⚠️ الترتيب مهم: بنقسم على النص الخام **قبل** أي تطبيع — الجملة بتحتفظ
+/// بنصها الأصلي للعرض، والتطبيع بيحصل جوّه حساب الكلمات للعدّ بس.
 abstract final class SentenceSplitter {
   /// علامات نهاية الجملة: . ! ? ؟ ؛ ; … والسطر الجديد.
   static final RegExp _endings =
@@ -48,10 +50,11 @@ abstract final class SentenceSplitter {
     var index = 0;
 
     for (final part in parts) {
-      // التطبيع بيحصل **بعد** التقطيع — جملة جملة.
-      final s = ArabicNormalizer.normalizeText(part);
-      if (s.length < _minSentenceLength) continue;
-      sentences.add(Sentence(index++, s));
+      // الحكم على الطول من النص الخام — جملة متشكّلة ما تتطنشش
+      // بسبب حروف التشكيل اللي بتحسب في طولها.
+      final raw = part.trim();
+      if (raw.length < _minSentenceLength) continue;
+      sentences.add(Sentence(index++, raw));
     }
 
     return sentences;

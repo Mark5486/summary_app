@@ -31,8 +31,12 @@ abstract final class ArabicNormalizer {
   }
 
   /// تنظيف نص خام قبل التلخيص: مسافات مضغوطة من غير مساس بالجمل.
+  ///
+  /// ⚠️ التشكيل بيتشال "بيدين" (الحرف بيفضل كله) — مش بمسافة —
+  /// عشان "إِنَّ" تفضل "إن" ومتتفككش "إ ن".
   static String normalizeText(String text) {
     var t = text.replaceAll('\u00A0', ' ');
+    t = t.replaceAll(_diacritics, '');
     t = t.replaceAll(_nonWord, ' ');
     t = t.replaceAll(_horizontalSpaces, ' ');
     t = t.replaceAll(_extraNewlines, '\n\n');

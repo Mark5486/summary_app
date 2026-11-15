@@ -28,6 +28,11 @@ void main() {
       expect(out.contains('،'), isFalse);
       expect(out.contains('!'), isFalse);
     });
+
+    test('التشكيل بيتشال من غير ما الحروف تتفكك (إِنَّ مش بتتقطع)', () {
+      final out = ArabicNormalizer.normalizeText('إِنَّ الْعِلْمَ نُورٌ');
+      expect(out, 'إن العلم نور');
+    });
   });
 
   group('Stopwords', () {
@@ -77,6 +82,28 @@ void main() {
       final sentences = SentenceSplitter.split(text);
       expect(sentences[0].index, 0);
       expect(sentences[1].index, 1);
+    });
+
+    test('الجملة بتحتفظ بنصها الأصلي (تشكيل) للعرض — مش نسخة مطبّعة', () {
+      final sentences = SentenceSplitter.split(
+          'إِنَّ الْعِلْمَ نُورٌ يُضِيءُ دَرْبَ الْمُتَعَلِّمِ فِي كُلِّ الأَحْوَالِ.');
+      expect(sentences, isNotEmpty);
+      // العرض: النص الأصلي زي ما هو.
+      expect(sentences.first.text.contains('إِنَّ'), isTrue);
+      expect(sentences.first.text.contains('إ ن'), isFalse);
+      // العدّ: "إِنَّ" كلمة واحدة متطبّعة، مش حروف مفكّكة.
+      expect(sentences.first.normalizedWords.first, 'ان');
+    });
+
+    test("النص الإنجليزي ببيّن علاماته في العرض (Don't و 3.5%)", () {
+      final sentences = SentenceSplitter.split(
+          "Don't stop believing in yourself, ever. Growth reached 3.5% this "
+          'year, which beat every forecast published by the team last spring.');
+      expect(sentences.length, 2);
+      expect(sentences[0].text.contains("Don't"), isTrue);
+      expect(sentences[0].text.contains('Don t'), isFalse);
+      expect(sentences[1].text.contains('3.5%'), isTrue);
+      expect(sentences[1].text.contains('3 5'), isFalse);
     });
   });
 
@@ -156,6 +183,48 @@ void main() {
       final result = ExtractiveSummarizer.summarize(englishText);
       expect(result.explanation, contains('main idea'));
       expect(result.explanation.contains('الفكرة'), isFalse);
+    });
+  });
+
+  group('ExtractiveSummarizer — النص الأصلي للعرض', () {
+    // النصوص دي متشكّلة وعليها ترقيم — لو أي تطبيع حصل قبل العرض
+    // هتفشل tests لأن النقاط مش هتلاقي نفسها حرفيًا في الأصل.
+    const diacriticText = 'إِنَّ الْعِلْمَ نُورٌ يُزِيلُ ظُلُمَاتِ الْجَهْلِ، '
+        'وَالْعِلْمُ سِلَاحٌ قَوِيٌّ يَحْمِي صَاحِبَهُ فِي كُلِّ زَمَانٍ. '
+        'طَلَبُ الْعِلْمِ عِبَادَةٌ تُقَرِّبُ الْإِنْسَانَ مِنْ رَبِّهِ، '
+        'وَالْمُعَلِّمُ الْأَمِينُ يَبْنِي أَجْيَالًا تَقْرَأُ وَتَفْكِرُ. '
+        'الْكِتَابُ الْجَيِّدُ صَدِيقٌ أَمِينٌ لَا يَمْنَعُ عِلْمَهُ عَمَّنْ '
+        'سَأَلَهُ يَوْمًا مَا.';
+
+    const englishSignedText = "Don't underestimate the power of small daily "
+        'habits, because they compound into remarkable results over time. '
+        'Growth reached 3.5% this year, which beat every forecast that the '
+        'analysts published last spring. Reading one chapter each night '
+        'keeps your mind sharp and your vocabulary steadily expanding. '
+        'Small wins build momentum, and momentum builds confidence for '
+        'bigger challenges ahead. Consistency beats intensity almost every '
+        'single time, whether you are training or studying.';
+
+    test('كل نقطة موجودة حرفيًا في النص الأصلي — عربي متشكّل', () {
+      final result = ExtractiveSummarizer.summarize(diacriticText);
+      expect(result.points, isNotEmpty);
+      for (final p in result.points) {
+        expect(diacriticText.contains(p), isTrue,
+            reason: 'النقطة اتعملها تطبيع قبل العرض: $p');
+      }
+      // مثال الريفيو: "إِنَّ الْعِلْمَ" ما تتفككش لـ "إ ن ال ع ل م".
+      expect(result.points.join(' ').contains('إ ن'), isFalse);
+    });
+
+    test('كل نقطة موجودة حرفيًا في النص الأصلي — إنجليزي بعلامات', () {
+      final result = ExtractiveSummarizer.summarize(englishSignedText);
+      expect(result.points, isNotEmpty);
+      for (final p in result.points) {
+        expect(englishSignedText.contains(p), isTrue,
+            reason: 'point was normalized before display: $p');
+      }
+      expect(result.points.join(' ').contains("Don't"), isTrue);
+      expect(result.points.join(' ').contains('3.5%'), isTrue);
     });
   });
 }

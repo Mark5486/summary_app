@@ -227,7 +227,9 @@ void main() {
 
     test('كل نقطة موجودة حرفيًا في النص الأصلي — إنجليزي بعلامات', () {
       final result = ExtractiveSummarizer.summarize(englishSignedText);
+      // ignore: avoid_print
       print('ORIGINAL TEXT: $englishSignedText');
+      // ignore: avoid_print
       print('SUMMARY POINTS: ${result.points}');
       expect(result.points, isNotEmpty);
       for (final p in result.points) {

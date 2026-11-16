@@ -14,15 +14,13 @@ apply plugin: 'com.android.library'
 
 android {
     namespace "io.paratoner.flutter_tesseract_ocr"
-    compileSdkVersion 34
+    // AGP 9: الـ DSL القديم (compileSdkVersion / minSdkVersion / lintOptions)
+    // اتشال نهائيًا — الصيغة الحديثة هي compileSdk / minSdk
+    compileSdk 36
 
     defaultConfig {
-        minSdkVersion 21
+        minSdk 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    lintOptions {
-        disable 'InvalidPackage'
     }
 }
 

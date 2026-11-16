@@ -8,12 +8,12 @@ analyzer:
     - ios/**
     - macos/**
     - linux/**
+    - packages/flutter_tesseract_ocr/**
   errors:
     deprecated_member_use: ignore
 
 include: package:flutter_lints/flutter.yaml
 
-# نفس روح مشروع الرحلات: تنظيف صارم — صفر تحذيرات.
 linter:
   rules:
     public_member_api_docs: false

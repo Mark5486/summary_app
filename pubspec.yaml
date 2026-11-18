@@ -45,7 +45,6 @@ dev_dependencies:
 dependency_overrides:
   flutter_tesseract_ocr:
     path: packages/flutter_tesseract_ocr
-    path: packages/file_picker
 
 flutter:
   uses-material-design: true

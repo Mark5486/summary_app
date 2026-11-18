@@ -9,6 +9,7 @@ environment:
   sdk: ">=3.9.0 <4.0.0"
 
 dependencies:
+  file_picker: ^10.3.10
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -26,7 +27,6 @@ dependencies:
   shared_preferences: ^2.5.3
 
   # إدخال النص: ملفات txt محليًا
-  file_picker: ^8.1.7
 
   camera: ^0.11.2+1
   flutter_tesseract_ocr: ^0.4.31
@@ -45,6 +45,7 @@ dev_dependencies:
 dependency_overrides:
   flutter_tesseract_ocr:
     path: packages/flutter_tesseract_ocr
+    path: packages/file_picker
 
 flutter:
   uses-material-design: true

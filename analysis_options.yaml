@@ -9,8 +9,6 @@ analyzer:
     - macos/**
     - linux/**
     - packages/flutter_tesseract_ocr/**
-  errors:
-    deprecated_member_use: ignore
 
 include: package:flutter_lints/flutter.yaml
 

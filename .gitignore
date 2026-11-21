@@ -40,3 +40,4 @@ app.*.map.json
 
 # ملفات سجلات
 *.log
+.gradle/
